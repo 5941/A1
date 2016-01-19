@@ -1,0 +1,91 @@
+<section class="panel panel-default content-box">
+  <header class="panel-heading"> 销货单管理 </header>
+  <div class="row wrapper">
+    <div class="col-sm-12">
+        <div class="btn-group m-r">
+          <input type="date" id="appendedInput" class="input-sm form-control" placeholder="2015-09-12">
+        </div>
+        <div class="btn-group m-r">
+          -
+        </div>
+        <div class="btn-group m-r">
+          <input type="date" id="appendedInput" class="input-sm form-control" placeholder="2016-09-14">
+        </div>
+        <div class="btn-group m-r">
+          <input type="text" id="appendedInput" class="input-sm form-control" placeholder="商品名称">
+        </div>
+        <div class="btn-group m-r">
+          <button class="btn btn-sm btn-default" type="button"><i class="i i-search2 icon"></i>搜索</button>
+        </div>
+        <div class="btn-group m-r pull-right">
+          <a href="#" class="btn btn-info btn-sm  pull-right"><i class="glyphicon glyphicon-plus"></i> 新建销货单</a>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="table-responsive">
+      <table class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            <th width="20">
+              <label class="checkbox m-l m-t-none m-b-none i-checks">
+                <input type="checkbox"><i></i></label>
+            </th>
+            <th>编号</th>
+            <th>状态</th>
+            <th>金额</th>
+            <th>地址</th>
+            <th>日期</th>
+          </tr>
+        </thead>
+
+        <!--loading-->
+        <tbody ng-if="vm.loading">
+          <tr >
+            <td colspan="8">
+            <a1-loader/>
+            </td>
+          </tr>
+        </tbody>
+        <!--not found-->
+        <tbody ng-if="vm.data.items && vm.data.items.length===0 && vm.loading==false">
+          <tr >
+            <td colspan='6'>
+            没有相关数据
+            </td>
+          </tr>
+        </tbody>
+        <tbody ng-if="vm.data.items && vm.data.items.length>0 && vm.loading==false">
+          <tr ng-repeat="item in vm.data.items">
+            <td>
+              <label class="checkbox m-l m-t-none m-b-none i-checks">
+                <input type="checkbox" name="post[]"><i></i></label>
+            </td>
+            <td> {{item.Code}}</td>
+            <td>{{item.Status}}</td>
+            <td>{{item.TotalMoney}}</td>
+            <td>{{item.Address.Full}}</td>
+            <td>{{item.Date}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <!--page-->
+    <footer class="panel-footer" ng-if="vm.data.items && vm.data.items.length>0 && vm.loading==false">
+      <div class="row">
+        <div class="col-sm-4 hidden-xs">
+          <!--button-->
+        </div>
+        <div paging
+        class="col-sm-8 text-right text-center-xs"
+          page="vm.pageIndex"
+          ul-class="pagination pagination-sm m-t-none m-b-none"
+          page-size="10"
+          total="vm.data.total"
+          show-prev-next=true
+          paging-action="vm.go(page)">
+          </div>
+      </div>
+    </footer>
+</section>

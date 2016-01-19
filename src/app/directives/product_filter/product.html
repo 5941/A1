@@ -1,0 +1,79 @@
+<div ng-class="{'sidebar-enter':show==true,'sidebar-out':show==false,'sidebar':true}">
+  <section class="vbox">
+    <section class="scrollable">
+      <section class="panel panel-default">
+        <header class="panel-heading">
+          <i class="glyphicon glyphicon-remove pull-right" ng-click="close()"></i>
+          <strong style="font-size:16px">商品添加面板{{vm.show}}</strong>
+        </header>
+        <header class="panel-heading">
+          <form>
+            <div class="input-group text-sm">
+              <input type="text" class="input-sm form-control" ng-model="query.codeOrName" placeholder="商品名称或商品编号">
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-sm btn-default" type="button" ng-click="search()"><i class="i i-search2 icon"></i>搜索</button>
+              </div>
+            </div>
+          </form>
+        </header>
+
+        <table class="table table-striped m-b-none ">
+          <thead>
+            <tr>
+              <th width="100"></th>
+              <th width="100">商品编号</th>
+              <th>商品名称</th>
+              <th width="100">价格</th>
+
+            </tr>
+          </thead>
+          <!--loading-->
+          <tbody ng-if="loading">
+            <tr>
+              <td colspan="4">
+                <a1-loader/>
+              </td>
+            </tr>
+          </tbody>
+          <!--not found-->
+          <tbody ng-if="data.items && data.items.length===0 && loading==false">
+            <tr>
+              <td colspan='4'>
+                没有相关数据
+              </td>
+            </tr>
+          </tbody>
+          <tbody ng-if="data.items && data.items.length>0 && loading==false">
+            <tr ng-repeat="item in data.items">
+              <td class="text-right">
+                <a ng-click="remove(item)" ng-if="disabled(item)" class="btn btn-xs btn-danger"><i class="fa fa-fw fa-minus"></i> 删除</a>
+                <a ng-click="add(item)" ng-if="!disabled(item)" class="btn btn-xs btn-primary"><i class="fa fa-fw fa-plus"></i> 添加</a>
+              </td>
+              <td>{{item.Code}}</td>
+              <td>
+                {{item.Name}}
+              </td>
+              <td>{{item.UnitPrice | currency:'￥'}}</td>
+
+            </tr>
+          </tbody>
+        </table>
+        <footer class="panel-footer" ng-if="data.items && data.items.length>0 ">
+          <div class="row">
+            <div class="col-sm-4 hidden-xs">
+              <!--button-->
+            </div>
+            <div class="col-sm-8 text-right text-center-xs">
+              <a1-paging page="query.pageIndex" ul-class="pagination pagination-sm m-t-none m-b-none" page-size="10" total="data.total" show-prev-next=true paging-action="go(page)">
+            </div>
+
+          </div>
+        </footer>
+
+        <footer class="panel-footer bg-light lter text-center">
+          <button type="submit" ng-click="close()" class="btn btn-primary">完成商品选择</button>
+        </footer>
+      </section>
+    </section>
+  </section>
+</div>

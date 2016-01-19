@@ -1,0 +1,69 @@
+<section ng-if="vm.loading==true">
+<a1-loader/>
+</section>
+
+<section class="panel panel-default content-box" ng-if="vm.loading==false">
+  <header class="panel-heading"> <a ui-sref="app.orders.list" class="btn btn-info btn-sm" ng-click="goback()"><i class="glyphicon glyphicon-chevron-left"></i> 返回</a>
+  </header>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td width="100">订单编号:</td>
+        <td>{{vm.data.Code}}</td>
+      </tr>
+      <tr>
+        <td width="100">订单状态:</td>
+        <td>
+          <span class="badge" ng-if="vm.data.Status==0">处理中</span>
+          <span class="badge bg-success" ng-if="vm.data.Status==1">完成</span>
+        </td>
+      </tr>
+      <tr>
+        <td width="100">订单总金额:</td>
+        <td>{{vm.data.TotalMoney|currency:"￥"}}</td>
+      </tr>
+      <tr>
+        <td width="100">订单时间:</td>
+        <td>{{vm.data.Date|date:'yyyy-MM-dd hh:mm:ss'}}</td>
+      </tr>
+      <tr>
+        <td width="100">送货地址:</td>
+        <td>{{vm.data.Address.Full}}</td>
+      </tr>
+      <tr>
+        <td width="100">邮编:</td>
+        <td>{{vm.data.Address.ZipCode}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped b-t b-light">
+    <thead>
+      <tr>
+        <th width="100">商品编码</th>
+        <th>商品名称</th>
+        <th>商品价格(元)</th>
+        <th>商品数量</th>
+        <th width="100">总计(元)</th>
+      </tr>
+    </thead>
+
+    <!--loading-->
+    <tbody ng-if="vm.loading">
+      <tr>
+        <td colspan="5">
+          <a1-loader/>
+        </td>
+      </tr>
+    </tbody>
+    <tbody ng-if="vm.data.Details && vm.data.Details.length>0 && vm.loading==false">
+      <tr ng-repeat="item in vm.data.Details">
+        <td>{{item.Product.Code}}</td>
+        <td>{{item.Product.Name}}</td>
+        <td>{{item.Product.UnitPrice|currency:"￥"}}</td>
+        <td>{{item.Price|currency:"￥"}}</td>
+        <td>{{item.Money*item.Quantity|currency:"￥"}}</td>
+      </tr>
+
+    </tbody>
+  </table>
+</section>

@@ -1,0 +1,61 @@
+<section class="hbox stretch">
+  <section class="vbox">
+    <section class="scrollable">
+      <div class="row ">
+        <div class="col-md-12">
+          <section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+            <div class="container aside-xl">
+              <img src="/img/sitelogo.png"></img>
+              <br/>
+              <br/>
+              <section class="">
+                <section class="panel panel-default">
+                  <header class="panel-heading">用户登陆</header>
+                  <div class="panel-body">
+                    <form name="signinForm" autocomplete="off" novalidate="" ng-submit="vm.login(signinForm.$valid)">
+                      <div class="form-group">
+                        <label>用户名:</label>
+                        <div ng-messages="signinForm.Account.$error" ng-if="signinForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">用户名不能为空</div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="" name="Account" ng-model="vm.formData.Account" required>
+                      </div>
+                      <div class="form-group">
+                        <label>密码:</label>
+                        <div ng-messages="signinForm.Password.$error" ng-if="signinForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">密码不能为空</div>
+                        </div>
+                        <input type="password" name="Password" class="form-control" placeholder="" ng-model="vm.formData.Password" required>
+                      </div>
+                      <div class="alert alert-danger" ng-if="vm.errorMessage">
+                        <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ban-circle"></i> {{vm.errorMessage}} </div>
+                      <button type="submit" class="btn btn-lg btn-primary btn-block">{{vm.loading==true?'登录中...':'登录'}}</button>
+                      <div class="row" style="text-align:center;margin-top:15px;">
+                        <div class="col-md-12"><a>忘记密码</a>&nbsp;&nbsp;&nbsp;&nbsp;<a ui-sref='signup'>注册账户</a></div>
+                      </div>
+                    </form>
+                  </div>
+                </section>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer id="footer">
+        <div class="text-center padder">
+
+          <p>
+            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>
+          </p>
+          <p>
+            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>
+          </p>
+          <p>
+            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>
+          </p>
+        </div>
+      </footer>
+    </section>
+  </section>
+</section>

@@ -1,0 +1,78 @@
+<section class="panel panel-default content-box" ng-if="vm.successMessage">
+  <div class="panel-body">
+    <div class="alert alert-success text-center" style="font-size:16px">
+      <i class="glyphicon glyphicon-ok"></i>
+      <strong>商品添加成功</strong>
+    </div>
+    <div class="form-group text-center">
+      <a ng-click="vm.reload()" class="btn btn-primary ng-binding">继续添加商品</a>
+      <button type="button" ng-click="vm.goback()" class="btn btn-default">返回列表</button>
+    </div>
+  </div>
+
+</section>
+
+<section class="panel panel-default content-box" ng-if="!vm.successMessage">
+  <header class="panel-heading">商品信息</header>
+  <div class="panel-body">
+
+    <form name="productForm" class="form-horizontal" autocomplete="off" novalidate="" ng-submit="vm.create(productForm.$valid)">
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">商品编码</label>
+        <div class="col-lg-10">
+          <input type="text" class="form-control" name="Code" ng-model="vm.formData.Code" placeholder="" required>
+          <span class="help-block m-b-none"></span>
+          <div ng-messages="productForm.Code.$error" ng-if="productForm.$submitted" role="alert">
+            <div class="label bg-danger" ng-message="required">商品编码不能为空</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">商品名称</label>
+        <div class="col-lg-10">
+          <input type="text" name="Name" ng-model="vm.formData.Name" class="form-control" placeholder="" required>
+          <span class="help-block m-b-none"></span>
+          <div ng-messages="productForm.Name.$error" ng-if="productForm.$submitted" role="alert">
+            <div class="label bg-danger" ng-message="required">商品名称不能为空</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-2 control-label">参考价格</label>
+        <div class="col-lg-2 ">
+          <div class="input-group m-b">
+            <input type="text" name="UnitPrice" ng-model="vm.formData.UnitPrice" class="form-control" placeholder="0.00" required>
+            <span class="input-group-addon">元</span>
+
+          </div>
+          <span class="help-block m-b-none"></span>
+          <div ng-messages="productForm.UnitPrice.$error" ng-if="productForm.$submitted" role="alert">
+            <div class="label bg-danger" ng-message="required">请填写参考价格</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">商品描述</label>
+        <div class="col-lg-10">
+          <textarea ng-model="vm.formData.Description"  style="height:150px;" class="form-control" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <div class="alert alert-danger" ng-if="vm.errorMessage">
+            <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ban-circle"></i> {{vm.errorMessage}}
+          </div>
+          <div class="alert alert-success" ng-if="vm.successMessage">
+            <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ban-circle"></i> 商品创建成功
+          </div>
+          <button type="submit" ng-click="vm.create(productForm.$valid)" class="btn btn-primary">{{vm.loading===true?'保存中...':'保存信息'}}</button>
+          <button type="button" ng-click="vm.goback()" class="btn btn-default">返回</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

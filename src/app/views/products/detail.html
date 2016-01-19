@@ -1,0 +1,46 @@
+<section ng-if="vm.loading">
+  <a1-loader/>
+</section>
+<section class="panel panel-default content-box" ng-if="!vm.loading">
+  <header class="header">
+    <style>
+      padding {
+        padding-top: 5px;
+      }
+    </style>
+
+    <p style="margin-left:10px">
+       <a ui-sref="app.products.list" class="btn btn-info btn-sm" ng-click="goback()"><i class="glyphicon glyphicon-chevron-left"></i> 返回</a> </header>
+  <header class="panel-heading">商品信息</header>
+  <div class="panel-body">
+    <form name="productForm" class="form-horizontal" autocomplete="off" novalidate="" ng-submit="vm.create(productForm.$valid)">
+
+      <div class="form-group">
+        <label class="col-lg-1">商品编码:</label>
+        <div class="col-lg-11  ">
+          {{vm.formData.Code}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-1">商品名称:</label>
+        <div class="col-lg-11">
+          {{vm.formData.Code}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-lg-1">参考价格:</label>
+        <div class="col-lg-11">
+          {{vm.formData.UnitPrice|currency:"￥"}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-1">商品描述:</label>
+        <div class="col-lg-11">
+          {{vm.formData.Description}}
+        </div>
+      </div>
+    </form>
+
+  </div>
+</section>

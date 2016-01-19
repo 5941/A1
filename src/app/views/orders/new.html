@@ -1,0 +1,115 @@
+<section class="panel panel-default content-box" ng-if="vm.successMessage">
+  <div class="panel-body">
+    <div class="alert alert-success text-center" style="font-size:16px">
+      <i class="glyphicon glyphicon-ok"></i>
+      <strong>订单添加成功</strong>
+    </div>
+    <div class="form-group text-center">
+      <a ng-click="vm.reload()" class="btn btn-primary ng-binding">继续添加订单</a>
+      <a ui-sref="app.orders.list" type="button" class="btn btn-default">返回列表</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel panel-default content-box" ng-if="!vm.successMessage">
+  <header class="panel-heading">订单表单</header>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td width="100" style="vertical-align: middle;">订单号:</td>
+        <td>{{vm.formData.Code}}</td>
+      </tr>
+      <tr>
+        <td width="100" style="vertical-align: middle;">选择省市:</td>
+        <td>
+          <div class="form-group">
+            <span>
+              <select  ng-model="vm.formData.Address.Province" ng-change="vm.changeProvince(vm.formData.Address.Province)">
+                <option style="font-size:14px;" ng-repeat="item in vm.provinces" value="{{item.name}}">{{item.name}}</option>
+              </select>
+            </span>
+            <span>
+              <select class="selectpicker" ng-model="vm.formData.Address.City" ng-change="vm.changeCity(vm.formData.Address.City)">
+                <option ng-repeat="city in vm.cities" value="{{city.name}}">{{city.name}}</option>
+              </select>
+            </span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td width="100" style="vertical-align: middle;">邮编:</td>
+        <td>
+          <input style="width:100px;" class="input-sm form-control" type="text" ng-model="vm.formData.Address.ZipCode"></input>
+        </td>
+      </tr>
+      <tr>
+        <td width="100" style="vertical-align: middle;">街道地址:</td>
+        <td>
+          <input  class="input-sm form-control" type="text" ng-model="vm.formData.Address.Street"></input>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <div class="btn-group m-r">
+            <a ng-click="vm.open()" class="btn btn-info btn-sm  pull-right"><i class="i i-add-to-list icon"></i> 添加商品</a>
+          </div>
+          <div class="btn-group m-r">
+            <a ng-click="vm.clear()" class="btn btn-danger btn-sm  pull-right"><i class="i  i-cross2 icon"></i> 清空商品</a>
+          </div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <table class="table table-striped b-t b-light">
+    <thead>
+      <tr>
+        <th width="100"></th>
+        <th>编号</th>
+        <th>商品编码</th>
+        <th>商品名称</th>
+        <th>价格(元)</th>
+        <th width="100">数量</th>
+        <th>总计(元)</th>
+      </tr>
+    </thead>
+
+    <!--not found-->
+    <tbody ng-if="vm.selectedItems && vm.selectedItems.length===0">
+      <tr>
+        <td colspan='7' height="200" style="vertical-align: middle;text-align:center">
+          <i class='fa fa-shopping-cart  fa-5x'></i>
+          <div>还没有添加商品</div>
+        </td>
+      </tr>
+    </tbody>
+    <tbody ng-if="vm.selectedItems && vm.selectedItems.length>0 ">
+      <tr ng-repeat="item in vm.selectedItems">
+        <td> <a ng-click="vm.remove($index)" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> 删除</a></td>
+        <td> {{item.ID}}</td>
+        <td>{{item.Code}}</td>
+        <td>{{item.Name}}</td>
+        <td>{{item.UnitPrice|currency:"￥"}}</td>
+        <td>
+          <input class="input-sm form-control" type="number" ng-model="item.Quantity"></input>
+        </td>
+        <td>{{item.UnitPrice*item.Quantity|currency:"￥"}}</td>
+      </tr>
+      <tr>
+        <td colspan="7" class="text-right" style="font-size:16px;">
+          <span class="label bg-warning" style="font-size:14px;">订单总金额：{{vm.total()|currency:"￥"}}</strong>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <footer class="panel-footer bg-light lter">
+    <div class="alert alert-danger" ng-if="vm.errorMessage">
+      <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ban-circle"></i> {{vm.errorMessage}}
+    </div>
+
+    <button type="submit" ng-click="vm.save()" class="btn btn-primary">{{vm.loading==true?"保存中...":"保存订单信息"}}</button>
+    <button type="button" ng-click="vm.goback()" class="btn btn-default">返回</button>
+  </footer>
+</section>
+<a1-product-filter show="vm.show" selected-items="vm.selectedItems" />
