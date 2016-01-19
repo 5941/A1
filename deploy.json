@@ -1,0 +1,26 @@
+{
+  "apps": [
+    {
+      "name": "a1",
+      "script": "server.js",
+      "env": {
+        "COMMON_ENV_VAR": "true",
+        "PORT":9005
+      },
+      "env_production": {
+       "NODE_ENV": "production"
+     }
+    }
+  ],
+  "deploy": {
+    "dev": {
+      "user": "ec2-user",
+      "host": "h5.liangyali.com",
+      "repo": "git@bitbucket.org-dev:a1cloud/startkit.git",
+      "ref": "origin/master",
+      "path": "/srv/www/a1",
+      "pre-deploy": "echo pre-deploy",
+      "post-deploy": "npm install && ./node_modules/.bin/gulp build --release &&pm2 startOrRestart deploy.json --env development"
+    },
+  }
+}

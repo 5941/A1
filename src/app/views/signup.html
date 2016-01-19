@@ -1,0 +1,89 @@
+<section class="hbox stretch">
+  <section class="vbox">
+    <section class="scrollable">
+      <div class="row">
+        <div class="col-md-12">
+          <section id="content" class="animated fadeInUp ">
+            <div class="container aside-xl">
+              <img src="/img/sitelogo.png"></img>
+              <br/>
+              <br/>
+
+              <section>
+                <section class="panel panel-default">
+                  <header class="panel-heading">用户注册</header>
+                  <div class="panel-body">
+                    <form name="signupForm" autocomplete="off" novalidate="" ng-submit="vm.signup(signupForm.$valid)">
+                      <div class="form-group">
+                        <label>用户名:</label>
+                        <div ng-messages="signupForm.account.$error" ng-if="signupForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">用户名不能为空</div>
+                          <div class="label bg-danger" ng-message="unique-account">用户名已经存在</div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="" name="account"  ng-model="vm.formData.account" required>
+                      </div>
+                      <div class="form-group">
+                        <label>手机号:</label>
+                        <div ng-messages="signupForm.cellphone.$error" ng-if="signupForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">手机号不能为空</div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="" name="cellphone" ng-model="vm.formData.cellphone" required>
+                      </div>
+                      <div class="form-group">
+                        <label>邮箱:</label>
+                        <div ng-messages="signupForm.email.$error" ng-if="signupForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">邮箱不能为空</div>
+                        </div>
+                        <input type="text" class="form-control" placeholder="" name="email" ng-model="vm.formData.email" required>
+                      </div>
+                      <div class="form-group">
+                        <label>设定密码:</label>
+                        <div ng-messages="signupForm.password.$error" ng-if="signupForm.$submitted" role="alert">
+                          <div class="label bg-danger" ng-message="required">密码不能为空</div>
+                        </div>
+                        <input type="password" name="password" class="form-control" placeholder="" ng-model="vm.formData.password" required>
+                      </div>
+                      <div class="form-group">
+                        <label>重复密码:</label>
+                        <div ng-messages="vm.confirmPasswordForm.$error" role="alert">
+                          <div class="label bg-danger" ng-if="vm.confirmPasswordForm.$error">重复密码不一致</div>
+                        </div>
+                        <input type="password" ng-model="vm.formData.confirmPassword" name="confirmPassword" class="form-control" placeholder="" required>
+                      </div>
+                      <div class="alert alert-success" ng-if="vm.successMessage">
+                        <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ok-sign"></i> {{vm.successMessage}}
+                      </div>
+                      <div class="alert alert-danger" ng-if="vm.errorMessage">
+                        <button type="button" class="close" data-dismiss="alert">×</button> <i class="fa fa-ok-sign"></i> {{vm.errorMessage}}
+                      </div>
+                      <button type="submit" class="btn btn-lg btn-primary btn-block">{{vm.loading==true?'注册中...':'注册'}}</button>
+                      <br/>
+                      <p class="text-muted text-center">
+                        <small>已经有账户?</small>
+                      </p>
+                      <a ui-sref="signin" class="btn btn-lg btn-default btn-block">登陆</a>
+                    </form>
+                  </div>
+                </section>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer id="footer">
+        <div class="text-center padder">
+          <p>
+            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>
+          </p>
+          <p>
+            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>
+          </p>
+          <p>
+            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>
+          </p>
+        </div>
+      </footer>
+    </section>
+  </section>
+</section>

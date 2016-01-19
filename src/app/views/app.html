@@ -1,0 +1,110 @@
+<section class="vbox">
+  <header class="bg-primary header header-md navbar navbar-fixed-top-xs box-shadow">
+    <div class="navbar-header aside-md dk">
+      <a href="index.html" class="navbar-brand">
+        <span class="hidden-nav-xs"><i class="i i-cloud icon"></i> 商贸云服务</span>
+      </a>
+      <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".user"> <i class="fa fa-cog"></i> </a>
+    </div>
+    <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
+      <li class="hidden-xs open">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="i i-chat3"></i>
+          <span class="badge badge-sm up bg-danger count" style="display: inline-block;">3</span>
+        </a>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <span class="thumb-sm avatar pull-left">
+            <img src="/img/profile.png" alt="..."> </span> {{vm.userInfo.Account}} <b class="caret"></b> </a>
+            <!--个人信息下拉菜单-->
+            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+              <li>
+                <span class="arrow top hidden-nav-xs"></span>
+                <a href="#">用户设置</a> </li>
+              <li> <a href="#">个人信息</a> </li>
+              <li>
+                <a href="#">
+                  <span class="badge bg-danger pull-right">3</span>
+                  消息通知 </a>
+              </li>
+              <li> <a href="#">帮助</a> </li>
+              <li class="divider"></li>
+              <li> <a href="#" ng-click="vm.logout()">退出系统</a> </li>
+            </ul>
+      </li>
+    </ul>
+  </header>
+  <section>
+    <section class="hbox stretch">
+      <!-- .aside -->
+      <aside class="bg-light lt b-r b-light aside-md hidden-print hidden-xs" id="nav">
+        <section class="vbox">
+          <section class="w-f scrollable">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
+              <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railopacity="0.2" style="overflow: hidden; width: auto; height: auto;">
+                <div class="clearfix wrapper dk nav-user hidden-xs">
+                  <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <span class="thumb avatar pull-left m-r">
+                        <!--user avator-->
+                        <img src="/img/profile.png" class="dker" alt="..."> <i class="on md b-light"></i> </span>
+                      <span class="hidden-nav-xs clear">
+                        <span class="block m-t-xs">
+                          <!--userinfo-->
+                          <strong class="font-bold text-lt">{{vm.userInfo.Name||vm.userInfo.Account}}</strong>  </span>
+                        <span class="text-muted text-xs block">--</span>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <!-- nav -->
+                <nav class="nav-primary hidden-xs">
+                  <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">系统菜单</div>
+                  <ul class="nav nav-main" data-ride="collapse">
+                    <li>
+                      <a ui-sref="app.main" class="auto">
+                        <i class="i i-statistics ico "> </i>
+                        <span>管理首页</span>
+                      </a>
+                      <li>
+                        <li ng-repeat="menu in vm.menus" ng-class="{'active':menu.active}">
+                          <a href="#" class="auto" ng-click="vm.changeMenu(menu)">
+                            <span class="pull-right text-muted"> <i class="i i-circle-sm-o text"></i>
+                              <i class="i i-circle-sm text-active"></i> </span>
+                            <i class="{{menu.iconClass}}"> </i>
+                            <span>{{menu.title}}</span>
+                          </a>
+                          <ul class="nav dk sub-menu">
+                            <li ng-repeat="subMenu in menu.children" ng-class="{'active':subMenu.active}">
+                              <a href="{{vm.$state.href(subMenu.route)}}" ng-click="vm.go(subMenu)" class="auto"><i class="i i-dot"></i>
+                            <span>{{subMenu.title}}</span>
+                          </a>
+                            </li>
+                          </ul>
+                        </li>
+                  </ul>
+                </nav>
+                <!-- / nav -->
+              </div>
+            </div>
+          </section>
+          <footer class="footer hidden-xs no-padder text-center-nav-xs">
+            <span> {{vm.version}}</span>
+          </footer>
+        </section>
+      </aside>
+      <!-- /.aside -->
+      <section id="content">
+        <section class="vbox">
+          <header class="header bg-white b-b b-light">
+            <i class="i i-grid3 icon"></i>
+            <p style="margin-left:10px">{{vm.$rootScope.brandcrumb.title}}</p>
+          </header>
+          <section class="scrollable">
+            <ui-view class="container-box" autoscroll="false"></ui-view>
+          </section>
+        </section>
+      </section>
+    </section>
+  </section>
+</section>
