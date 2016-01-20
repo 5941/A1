@@ -1,0 +1,20 @@
+<section class="panel">
+  <header class="panel-heading"> 书籍列表</header>
+  <table>
+    <thead>
+    <tr>
+      <td>书名</td>
+      <td>ISBN</td>
+    </tr>
+    </thead>
+    <tr ng-repeat="item in vm.data.items" class="table-responsive">
+      <td>
+        {{item.BookName}}
+      </td>
+      <td>
+        {{item.ISBNCode}}
+      </td>
+    </tr>
+  </table>
+
+</section>

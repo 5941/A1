@@ -6,4 +6,5 @@ angular.module('app.routes', []).config(function($stateProvider, $urlRouterProvi
   require('./orders')($stateProvider, $urlRouterProvider);
   require('./store')($stateProvider, $urlRouterProvider);
   require('./demo')($stateProvider, $urlRouterProvider);
+  require('./books')($stateProvider, $urlRouterProvider);
 });

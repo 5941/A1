@@ -72,6 +72,16 @@ export default class AppController {
         route: '',
       }]
     }, {
+      title: '书籍管理',
+      route: '',
+      iconClass: 'i i-stack icon',
+      active: false,
+      children: [{
+        title: '书籍信息维护',
+        route: 'app.books.main',
+      }]
+    },
+      {
       title: '财务管理',
       route: '',
       iconClass: 'i i-grid3 icon',

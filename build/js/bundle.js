@@ -1444,11 +1444,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _angular = __webpack_require__(65);
+	var _angular = __webpack_require__(70);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _angularUiRouter = __webpack_require__(64);
+	var _angularUiRouter = __webpack_require__(69);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
@@ -1464,19 +1464,19 @@
 	
 	var _angularLoadingBar2 = _interopRequireDefault(_angularLoadingBar);
 	
-	var _routes = __webpack_require__(37);
+	var _routes = __webpack_require__(40);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _controllers = __webpack_require__(16);
+	var _controllers = __webpack_require__(18);
 	
 	var _controllers2 = _interopRequireDefault(_controllers);
 	
-	var _services = __webpack_require__(43);
+	var _services = __webpack_require__(47);
 	
 	var _services2 = _interopRequireDefault(_services);
 	
-	var _directives = __webpack_require__(31);
+	var _directives = __webpack_require__(33);
 	
 	var _directives2 = _interopRequireDefault(_directives);
 	
@@ -1608,6 +1608,15 @@
 	        route: ''
 	      }]
 	    }, {
+	      title: '书籍管理',
+	      route: '',
+	      iconClass: 'i i-stack icon',
+	      active: false,
+	      children: [{
+	        title: '书籍信息维护',
+	        route: 'app.books.main'
+	      }]
+	    }, {
 	      title: '财务管理',
 	      route: '',
 	      iconClass: 'i i-grid3 icon',
@@ -1707,16 +1716,116 @@
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Created by linxy on 2016/1/19.
+	 */
+	
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = angular.module('app.controllers.demo', []).controller('demo.main', __webpack_require__(12)).name;
+	exports['default'] = angular.module('app.controllers.books', []).controller('books.main', __webpack_require__(12)).name;
 	module.exports = exports['default'];
 
 /***/ },
 /* 12 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by linxy on 2016/1/19.
+	 */
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var MainController = (function () {
+	  function MainController(BookService, $location) {
+	    _classCallCheck(this, MainController);
+	
+	    this.BookService = BookService;
+	    this.$location = $location;
+	    this.loading = true;
+	    this.data = {};
+	
+	    var _$location$search = $location.search();
+	
+	    var pageNumber = _$location$search.pageNumber;
+	    var codeOrName = _$location$search.codeOrName;
+	
+	    this.query = {
+	      pageSize: 10,
+	      pageNumber: pageNumber || 1,
+	      Name: codeOrName || ''
+	    };
+	
+	    this.loadData();
+	  }
+	
+	  _createClass(MainController, [{
+	    key: 'loadData',
+	    value: function loadData() {
+	      this.fetchData(this.query);
+	    }
+	  }, {
+	    key: 'go',
+	    value: function go(pageNumber) {
+	
+	      this.query.pageNumber = pageNumber;
+	      this.$location.search(this.query);
+	      this.fetchData(this.query);
+	      return;
+	    }
+	  }, {
+	    key: 'fetchData',
+	    value: function fetchData(params) {
+	      var _this = this;
+	
+	      this.loading = true;
+	
+	      this.BookService.findAll(params).then(function (resp) {
+	        var data = resp.data.data || {};
+	        _this.data = {
+	          items: data.Data || [],
+	          total: data.TotalRecords || 0,
+	          page: data.PageNumber || 1
+	        };
+	        _this.loading = false;
+	      }, function (err) {
+	        _this.errorMessage = err.data.Message;
+	        _this.loading = false;
+	      });
+	    }
+	  }]);
+	
+	  return MainController;
+	})();
+	
+	exports['default'] = MainController;
+	
+	MainController.$inject = ['BookService', '$location'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = angular.module('app.controllers.demo', []).controller('demo.main', __webpack_require__(14)).name;
+	module.exports = exports['default'];
+
+/***/ },
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1796,7 +1905,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1815,7 +1924,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1825,11 +1934,11 @@
 	});
 	exports['default'] = 'app.controllers.home';
 	
-	angular.module('app.controllers.home', []).controller('home.main', __webpack_require__(15)).controller('home.detail', __webpack_require__(13));
+	angular.module('app.controllers.home', []).controller('home.main', __webpack_require__(17)).controller('home.detail', __webpack_require__(15));
 	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/**
@@ -1851,7 +1960,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1862,29 +1971,33 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _home = __webpack_require__(14);
+	var _home = __webpack_require__(16);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _products = __webpack_require__(26);
+	var _products = __webpack_require__(28);
 	
 	var _products2 = _interopRequireDefault(_products);
 	
-	var _orders = __webpack_require__(19);
+	var _orders = __webpack_require__(21);
 	
 	var _orders2 = _interopRequireDefault(_orders);
 	
-	var _demo = __webpack_require__(11);
+	var _demo = __webpack_require__(13);
 	
 	var _demo2 = _interopRequireDefault(_demo);
 	
+	var _books = __webpack_require__(11);
+	
+	var _books2 = _interopRequireDefault(_books);
+	
 	exports['default'] = 'app.controllers';
 	
-	angular.module('app.controllers', [_home2['default'], _products2['default'], _orders2['default'], _demo2['default']]).controller('signin', __webpack_require__(29)).controller('signup', __webpack_require__(30)).controller('app', __webpack_require__(10));
+	angular.module('app.controllers', [_home2['default'], _products2['default'], _orders2['default'], _demo2['default'], _books2['default']]).controller('signin', __webpack_require__(31)).controller('signup', __webpack_require__(32)).controller('app', __webpack_require__(10));
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1947,7 +2060,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2116,7 +2229,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2127,15 +2240,15 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _sales = __webpack_require__(22);
+	var _sales = __webpack_require__(24);
 	
 	var _sales2 = _interopRequireDefault(_sales);
 	
-	exports['default'] = angular.module('app.controllers.orders', [_sales2['default']]).controller('orders.list', __webpack_require__(20)).controller('orders.detail', __webpack_require__(17)).controller('orders.new', __webpack_require__(21)).controller('orders.edit', __webpack_require__(18)).name;
+	exports['default'] = angular.module('app.controllers.orders', [_sales2['default']]).controller('orders.list', __webpack_require__(22)).controller('orders.detail', __webpack_require__(19)).controller('orders.new', __webpack_require__(23)).controller('orders.edit', __webpack_require__(20)).name;
 	module.exports = exports['default'];
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports) {
 
 	/**
@@ -2260,7 +2373,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2412,7 +2525,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2420,11 +2533,11 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = angular.module('app.controllers.orders.sales', []).controller('orders.sales.list', __webpack_require__(23)).name;
+	exports['default'] = angular.module('app.controllers.orders.sales', []).controller('orders.sales.list', __webpack_require__(25)).name;
 	module.exports = exports['default'];
 
 /***/ },
-/* 23 */
+/* 25 */
 /***/ function(module, exports) {
 
 	/**
@@ -2508,7 +2621,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 24 */
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2570,7 +2683,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 25 */
+/* 27 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2661,7 +2774,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2671,11 +2784,11 @@
 	});
 	exports['default'] = 'app.controllers.products';
 	
-	angular.module('app.controllers.products', []).controller('products.list', __webpack_require__(27)).controller('products.new', __webpack_require__(28)).controller('products.edit', __webpack_require__(25)).controller('products.detail', __webpack_require__(24));
+	angular.module('app.controllers.products', []).controller('products.list', __webpack_require__(29)).controller('products.new', __webpack_require__(30)).controller('products.edit', __webpack_require__(27)).controller('products.detail', __webpack_require__(26));
 	module.exports = exports['default'];
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports) {
 
 	/**
@@ -2789,7 +2902,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2868,7 +2981,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2944,7 +3057,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3026,7 +3139,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3036,11 +3149,11 @@
 	});
 	exports['default'] = 'app.directives';
 	
-	angular.module('app.directives', []).directive('a1Loader', __webpack_require__(32)).directive('a1Paging', __webpack_require__(33)).directive('a1ProductFilter', __webpack_require__(34));
+	angular.module('app.directives', []).directive('a1Loader', __webpack_require__(34)).directive('a1Paging', __webpack_require__(35)).directive('a1ProductFilter', __webpack_require__(36));
 	module.exports = exports['default'];
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3059,7 +3172,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3420,7 +3533,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3438,7 +3551,7 @@
 	      onChange: "&"
 	    },
 	    restrict: 'AE',
-	    template: __webpack_require__(47),
+	    template: __webpack_require__(51),
 	    controller: ProductFilterController
 	  };
 	}
@@ -3513,7 +3626,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3529,7 +3642,7 @@
 	  $stateProvider.state('app', {
 	    url: '',
 	    abstract: true,
-	    template: __webpack_require__(49),
+	    template: __webpack_require__(53),
 	    controller: 'app',
 	    controllerAs: 'vm'
 	  });
@@ -3537,7 +3650,7 @@
 	  // 登陆界面
 	  $stateProvider.state('signin', {
 	    url: '/signin',
-	    template: __webpack_require__(61),
+	    template: __webpack_require__(66),
 	    controller: 'signin',
 	    controllerAs: 'vm'
 	  });
@@ -3545,7 +3658,7 @@
 	  // 注册界面
 	  $stateProvider.state('signup', {
 	    url: '/signup',
-	    template: __webpack_require__(62),
+	    template: __webpack_require__(67),
 	    controller: 'signup',
 	    controllerAs: 'vm'
 	  });
@@ -3553,7 +3666,7 @@
 	  // 404界面处理
 	  $stateProvider.state('404', {
 	    url: '/404',
-	    template: __webpack_require__(48)
+	    template: __webpack_require__(52)
 	  });
 	
 	  // 默认首页
@@ -3562,7 +3675,7 @@
 	    brandcrumb: {
 	      title: '管理首页'
 	    },
-	    template: __webpack_require__(51),
+	    template: __webpack_require__(56),
 	    authenticate: true
 	  });
 	}
@@ -3570,7 +3683,37 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 36 */
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by linxy on 2016/1/19.
+	 */
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = routes;
+	
+	function routes($stateProvider, $urlRouterProvider) {
+	  $stateProvider.state('app.books', {
+	    url: '/books',
+	    abstract: true,
+	    template: '<ui-view/>'
+	  });
+	  $stateProvider.state('app.books.main', {
+	    url: '',
+	    controller: 'books.main',
+	    template: __webpack_require__(54),
+	    controllerAs: 'vm'
+	  });
+	}
+	
+	module.exports = exports['default'];
+
+/***/ },
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3591,7 +3734,7 @@
 	  $stateProvider.state('app.demo.main', {
 	    url: '',
 	    controller: 'demo.main',
-	    template: __webpack_require__(50),
+	    template: __webpack_require__(55),
 	    controllerAs: 'vm'
 	  });
 	}
@@ -3599,7 +3742,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 37 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3610,16 +3753,17 @@
 	exports['default'] = 'app.routes';
 	
 	angular.module('app.routes', []).config(function ($stateProvider, $urlRouterProvider) {
-	  __webpack_require__(35)($stateProvider, $urlRouterProvider);
+	  __webpack_require__(37)($stateProvider, $urlRouterProvider);
+	  __webpack_require__(42)($stateProvider, $urlRouterProvider);
+	  __webpack_require__(41)($stateProvider, $urlRouterProvider);
+	  __webpack_require__(43)($stateProvider, $urlRouterProvider);
 	  __webpack_require__(39)($stateProvider, $urlRouterProvider);
 	  __webpack_require__(38)($stateProvider, $urlRouterProvider);
-	  __webpack_require__(40)($stateProvider, $urlRouterProvider);
-	  __webpack_require__(36)($stateProvider, $urlRouterProvider);
 	});
 	module.exports = exports['default'];
 
 /***/ },
-/* 38 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3645,7 +3789,7 @@
 	    brandcrumb: {
 	      title: '订单管理 -> 新建订单'
 	    },
-	    template: __webpack_require__(55)
+	    template: __webpack_require__(60)
 	  });
 	
 	  $stateProvider.state('app.orders.list', {
@@ -3655,7 +3799,7 @@
 	    brandcrumb: {
 	      title: '订单管理 -> 订单列表'
 	    },
-	    template: __webpack_require__(54)
+	    template: __webpack_require__(59)
 	  });
 	
 	  $stateProvider.state('app.orders.detail', {
@@ -3665,7 +3809,7 @@
 	    brandcrumb: {
 	      title: '订单管理 -> 订单详情'
 	    },
-	    template: __webpack_require__(52)
+	    template: __webpack_require__(57)
 	  });
 	
 	  $stateProvider.state('app.orders.edit', {
@@ -3675,7 +3819,7 @@
 	    brandcrumb: {
 	      title: '订单管理 -> 订单编辑'
 	    },
-	    template: __webpack_require__(53)
+	    template: __webpack_require__(58)
 	  });
 	
 	  $stateProvider.state('app.orders.sales', {
@@ -3685,14 +3829,14 @@
 	    brandcrumb: {
 	      title: '订单管理 -> 销货单管理'
 	    },
-	    template: __webpack_require__(56)
+	    template: __webpack_require__(61)
 	  });
 	}
 	
 	module.exports = exports['default'];
 
 /***/ },
-/* 39 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3717,7 +3861,7 @@
 	      title: '商品管理 -> 商品列表'
 	    },
 	    controller: 'products.list',
-	    template: __webpack_require__(59),
+	    template: __webpack_require__(64),
 	    controllerAs: 'vm',
 	    authenticate: false
 	  });
@@ -3728,7 +3872,7 @@
 	      title: '商品管理 -> 创建商品'
 	    },
 	    controller: 'products.new',
-	    template: __webpack_require__(60),
+	    template: __webpack_require__(65),
 	    controllerAs: 'vm'
 	  });
 	  //authenticate: true
@@ -3738,7 +3882,7 @@
 	      title: '商品管理 -> 编辑商品'
 	    },
 	    controller: 'products.edit',
-	    template: __webpack_require__(58),
+	    template: __webpack_require__(63),
 	    controllerAs: 'vm'
 	  });
 	
@@ -3748,7 +3892,7 @@
 	    brandcrumb: {
 	      title: '商品管理 -> 商品详情'
 	    },
-	    template: __webpack_require__(57),
+	    template: __webpack_require__(62),
 	    controller: 'products.detail',
 	    controllerAs: 'vm'
 	  });
@@ -3758,7 +3902,7 @@
 	//authenticate: false
 
 /***/ },
-/* 40 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3772,7 +3916,7 @@
 	  // 店铺首页
 	  $stateProvider.state('app.store', {
 	    url: '/store',
-	    template: __webpack_require__(63),
+	    template: __webpack_require__(68),
 	    controllerAs: 'vm',
 	    authenticate: true
 	  });
@@ -3781,7 +3925,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 41 */
+/* 44 */
 /***/ function(module, exports) {
 
 	/**
@@ -3838,7 +3982,50 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 42 */
+/* 45 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by linxy on 2016/1/19.
+	 */
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var BookService = (function () {
+	  function BookService($http) {
+	    _classCallCheck(this, BookService);
+	
+	    this.$http = $http;
+	  }
+	
+	  _createClass(BookService, [{
+	    key: 'findAll',
+	    value: function findAll(params) {
+	      return this.$http({
+	        method: 'GET',
+	        params: params,
+	        url: '/api/Book/GetBooks'
+	      });
+	    }
+	  }]);
+	
+	  return BookService;
+	})();
+	
+	exports['default'] = BookService;
+	
+	BookService.$inject = ['$http'];
+	module.exports = exports['default'];
+
+/***/ },
+/* 46 */
 /***/ function(module, exports) {
 
 	/**
@@ -3881,7 +4068,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3889,11 +4076,11 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports['default'] = angular.module('app.services', []).service('AuthService', __webpack_require__(41)).service('UserService', __webpack_require__(46)).service('ProductService', __webpack_require__(45)).service('OrderService', __webpack_require__(44)).service('DemoService', __webpack_require__(42)).name;
+	exports['default'] = angular.module('app.services', []).service('AuthService', __webpack_require__(44)).service('UserService', __webpack_require__(50)).service('ProductService', __webpack_require__(49)).service('OrderService', __webpack_require__(48)).service('DemoService', __webpack_require__(46)).service('BookService', __webpack_require__(45)).name;
 	module.exports = exports['default'];
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports) {
 
 	/**
@@ -3974,7 +4161,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 45 */
+/* 49 */
 /***/ function(module, exports) {
 
 	/**
@@ -4055,7 +4242,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 46 */
+/* 50 */
 /***/ function(module, exports) {
 
 	/**
@@ -4152,115 +4339,121 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 47 */
+/* 51 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-class=\"{'sidebar-enter':show==true,'sidebar-out':show==false,'sidebar':true}\">\n  <section class=\"vbox\">\n    <section class=\"scrollable\">\n      <section class=\"panel panel-default\">\n        <header class=\"panel-heading\">\n          <i class=\"glyphicon glyphicon-remove pull-right\" ng-click=\"close()\"></i>\n          <strong style=\"font-size:16px\">商品添加面板{{vm.show}}</strong>\n        </header>\n        <header class=\"panel-heading\">\n          <form>\n            <div class=\"input-group text-sm\">\n              <input type=\"text\" class=\"input-sm form-control\" ng-model=\"query.codeOrName\" placeholder=\"商品名称或商品编号\">\n              <div class=\"input-group-btn\">\n                <button type=\"submit\" class=\"btn btn-sm btn-default\" type=\"button\" ng-click=\"search()\"><i class=\"i i-search2 icon\"></i>搜索</button>\n              </div>\n            </div>\n          </form>\n        </header>\n\n        <table class=\"table table-striped m-b-none \">\n          <thead>\n            <tr>\n              <th width=\"100\"></th>\n              <th width=\"100\">商品编号</th>\n              <th>商品名称</th>\n              <th width=\"100\">价格</th>\n\n            </tr>\n          </thead>\n          <!--loading-->\n          <tbody ng-if=\"loading\">\n            <tr>\n              <td colspan=\"4\">\n                <a1-loader/>\n              </td>\n            </tr>\n          </tbody>\n          <!--not found-->\n          <tbody ng-if=\"data.items && data.items.length===0 && loading==false\">\n            <tr>\n              <td colspan='4'>\n                没有相关数据\n              </td>\n            </tr>\n          </tbody>\n          <tbody ng-if=\"data.items && data.items.length>0 && loading==false\">\n            <tr ng-repeat=\"item in data.items\">\n              <td class=\"text-right\">\n                <a ng-click=\"remove(item)\" ng-if=\"disabled(item)\" class=\"btn btn-xs btn-danger\"><i class=\"fa fa-fw fa-minus\"></i> 删除</a>\n                <a ng-click=\"add(item)\" ng-if=\"!disabled(item)\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-fw fa-plus\"></i> 添加</a>\n              </td>\n              <td>{{item.Code}}</td>\n              <td>\n                {{item.Name}}\n              </td>\n              <td>{{item.UnitPrice | currency:'￥'}}</td>\n\n            </tr>\n          </tbody>\n        </table>\n        <footer class=\"panel-footer\" ng-if=\"data.items && data.items.length>0 \">\n          <div class=\"row\">\n            <div class=\"col-sm-4 hidden-xs\">\n              <!--button-->\n            </div>\n            <div class=\"col-sm-8 text-right text-center-xs\">\n              <a1-paging page=\"query.pageIndex\" ul-class=\"pagination pagination-sm m-t-none m-b-none\" page-size=\"10\" total=\"data.total\" show-prev-next=true paging-action=\"go(page)\">\n            </div>\n\n          </div>\n        </footer>\n\n        <footer class=\"panel-footer bg-light lter text-center\">\n          <button type=\"submit\" ng-click=\"close()\" class=\"btn btn-primary\">完成商品选择</button>\n        </footer>\n      </section>\n    </section>\n  </section>\n</div>\n"
 
 /***/ },
-/* 48 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = "<section id=\"content\">\n  <div class=\"row m-n\">\n    <div class=\"col-sm-4 col-sm-offset-4\">\n      <div class=\"text-center m-b-lg\">\n        <h1 class=\"h text-white animated fadeInDownBig\">404</h1>\n      </div>\n    </div>\n  </div>\n</section>\n"
 
 /***/ },
-/* 49 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"vbox\">\n  <header class=\"bg-primary header header-md navbar navbar-fixed-top-xs box-shadow\">\n    <div class=\"navbar-header aside-md dk\">\n      <a href=\"index.html\" class=\"navbar-brand\">\n        <span class=\"hidden-nav-xs\"><i class=\"i i-cloud icon\"></i> 商贸云服务</span>\n      </a>\n      <a class=\"btn btn-link visible-xs\" data-toggle=\"dropdown\" data-target=\".user\"> <i class=\"fa fa-cog\"></i> </a>\n    </div>\n    <ul class=\"nav navbar-nav navbar-right m-n hidden-xs nav-user user\">\n      <li class=\"hidden-xs open\">\n        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"> <i class=\"i i-chat3\"></i>\n          <span class=\"badge badge-sm up bg-danger count\" style=\"display: inline-block;\">3</span>\n        </a>\n      </li>\n      <li class=\"dropdown\">\n        <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n          <span class=\"thumb-sm avatar pull-left\">\n            <img src=\"/img/profile.png\" alt=\"...\"> </span> {{vm.userInfo.Account}} <b class=\"caret\"></b> </a>\n            <!--个人信息下拉菜单-->\n            <ul class=\"dropdown-menu animated fadeInRight m-t-xs\">\n              <li>\n                <span class=\"arrow top hidden-nav-xs\"></span>\n                <a href=\"#\">用户设置</a> </li>\n              <li> <a href=\"#\">个人信息</a> </li>\n              <li>\n                <a href=\"#\">\n                  <span class=\"badge bg-danger pull-right\">3</span>\n                  消息通知 </a>\n              </li>\n              <li> <a href=\"#\">帮助</a> </li>\n              <li class=\"divider\"></li>\n              <li> <a href=\"#\" ng-click=\"vm.logout()\">退出系统</a> </li>\n            </ul>\n      </li>\n    </ul>\n  </header>\n  <section>\n    <section class=\"hbox stretch\">\n      <!-- .aside -->\n      <aside class=\"bg-light lt b-r b-light aside-md hidden-print hidden-xs\" id=\"nav\">\n        <section class=\"vbox\">\n          <section class=\"w-f scrollable\">\n            <div class=\"slimScrollDiv\" style=\"position: relative; overflow: hidden; width: auto; height: auto;\">\n              <div class=\"slim-scroll\" data-height=\"auto\" data-disable-fade-out=\"true\" data-distance=\"0\" data-size=\"10px\" data-railopacity=\"0.2\" style=\"overflow: hidden; width: auto; height: auto;\">\n                <div class=\"clearfix wrapper dk nav-user hidden-xs\">\n                  <div class=\"dropdown\">\n                    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n                      <span class=\"thumb avatar pull-left m-r\">\n                        <!--user avator-->\n                        <img src=\"/img/profile.png\" class=\"dker\" alt=\"...\"> <i class=\"on md b-light\"></i> </span>\n                      <span class=\"hidden-nav-xs clear\">\n                        <span class=\"block m-t-xs\">\n                          <!--userinfo-->\n                          <strong class=\"font-bold text-lt\">{{vm.userInfo.Name||vm.userInfo.Account}}</strong>  </span>\n                        <span class=\"text-muted text-xs block\">--</span>\n                      </span>\n                    </a>\n                  </div>\n                </div>\n                <!-- nav -->\n                <nav class=\"nav-primary hidden-xs\">\n                  <div class=\"text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm\">系统菜单</div>\n                  <ul class=\"nav nav-main\" data-ride=\"collapse\">\n                    <li>\n                      <a ui-sref=\"app.main\" class=\"auto\">\n                        <i class=\"i i-statistics ico \"> </i>\n                        <span>管理首页</span>\n                      </a>\n                      <li>\n                        <li ng-repeat=\"menu in vm.menus\" ng-class=\"{'active':menu.active}\">\n                          <a href=\"#\" class=\"auto\" ng-click=\"vm.changeMenu(menu)\">\n                            <span class=\"pull-right text-muted\"> <i class=\"i i-circle-sm-o text\"></i>\n                              <i class=\"i i-circle-sm text-active\"></i> </span>\n                            <i class=\"{{menu.iconClass}}\"> </i>\n                            <span>{{menu.title}}</span>\n                          </a>\n                          <ul class=\"nav dk sub-menu\">\n                            <li ng-repeat=\"subMenu in menu.children\" ng-class=\"{'active':subMenu.active}\">\n                              <a href=\"{{vm.$state.href(subMenu.route)}}\" ng-click=\"vm.go(subMenu)\" class=\"auto\"><i class=\"i i-dot\"></i>\n                            <span>{{subMenu.title}}</span>\n                          </a>\n                            </li>\n                          </ul>\n                        </li>\n                  </ul>\n                </nav>\n                <!-- / nav -->\n              </div>\n            </div>\n          </section>\n          <footer class=\"footer hidden-xs no-padder text-center-nav-xs\">\n            <span> {{vm.version}}</span>\n          </footer>\n        </section>\n      </aside>\n      <!-- /.aside -->\n      <section id=\"content\">\n        <section class=\"vbox\">\n          <header class=\"header bg-white b-b b-light\">\n            <i class=\"i i-grid3 icon\"></i>\n            <p style=\"margin-left:10px\">{{vm.$rootScope.brandcrumb.title}}</p>\n          </header>\n          <section class=\"scrollable\">\n            <ui-view class=\"container-box\" autoscroll=\"false\"></ui-view>\n          </section>\n        </section>\n      </section>\n    </section>\n  </section>\n</section>\n"
 
 /***/ },
-/* 50 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> Demo列表 </header>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"100\">商品编码</th>\n          <th>商品名称</th>\n          <th width=\"100\">单价</th>\n        </tr>\n      </thead>\n\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr >\n          <td colspan='6'>\n          <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='6' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-umbrella fa-5x'></i>\n            <div>没有找到相关商品</div>\n          </td>\n        </tr>\n      </tbody>\n      <!--list items-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td>{{item.Code}} </td>\n          <td style=\"text-align:left;padding-left:10px;\">{{item.Name}}</td>\n          <td>  {{item.UnitPrice|currency:\"￥\"}}</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging\n          page=\"vm.query.pageNumber\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n\n    </div>\n  </footer>\n</section>\n"
-
-/***/ },
-/* 51 */
-/***/ function(module, exports) {
-
-	module.exports = "<section class=\"scrollable padder\">\n  <div class=\"m-b-md\">\n    <div class=\"row\">\n      <div class=\"col-sm-6\">\n        <h3 class=\"m-b-none\">测试首页</h3>\n        <small>--</small>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"text-right text-left-xs\">\n          <div class=\"sparkline m-l m-r-lg pull-right\" data-type=\"bar\" data-height=\"35\" data-bar-width=\"6\" data-bar-spacing=\"2\" data-bar-color=\"#fb6b5b\">\n            <canvas width=\"86\" height=\"35\" style=\"display: inline-block; width: 86px; height: 35px; vertical-align: top;\"></canvas>\n          </div>\n          <div class=\"m-t-md\">\n            <span class=\"text-uc\">商品数量</span>\n            <div class=\"h4 m-n\">\n              <strong>1,120,100</strong>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <section class=\"panel panel-default\">\n    <header class=\"panel-heading font-bold\">销售状况表</header>\n    <div class=\"panel-body\">\n      <div id=\"flot-1ine\" style=\"height: 250px; padding: 0px; position: relative;\">\n        <canvas class=\"flot-base\" width=\"2736\" height=\"500\" style=\"direction: ltr; position: absolute; left: 0px; top: 0px; width: 1368px; height: 250px;\"></canvas>\n        <div class=\"flot-text\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);\">\n          <div class=\"flot-x-axis flot-x1-axis xAxis x1Axis\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;\">\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 12px; text-align: center;\">0.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 133px; text-align: center;\">1.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 254px; text-align: center;\">2.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 376px; text-align: center;\">3.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 497px; text-align: center;\">4.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 619px; text-align: center;\">5.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 740px; text-align: center;\">6.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 862px; text-align: center;\">7.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 983px; text-align: center;\">8.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1105px; text-align: center;\">9.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1223px; text-align: center;\">10.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1344px; text-align: center;\">11.0</div>\n          </div>\n          <div class=\"flot-y-axis flot-y1-axis yAxis y1Axis\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;\">\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 217px; left: 8px; text-align: right;\">0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 174px; left: 8px; text-align: right;\">5</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 130px; left: 1px; text-align: right;\">10</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 87px; left: 1px; text-align: right;\">15</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 43px; left: 1px; text-align: right;\">20</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 0px; left: 1px; text-align: right;\">25</div>\n          </div>\n        </div>\n        <canvas class=\"flot-overlay\" width=\"2736\" height=\"500\" style=\"direction: ltr; position: absolute; left: 0px; top: 0px; width: 1368px; height: 250px;\"></canvas>\n      </div>\n    </div>\n    <footer class=\"panel-footer bg-white\">\n      <div class=\"row text-center no-gutter\">\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">5,860</p>\n          <p class=\"text-muted\">订单</p>\n        </div>\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">10,450</p>\n          <p class=\"text-muted\">销售金额</p>\n        </div>\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">21,230</p>\n          <p class=\"text-muted\">销售数量</p>\n        </div>\n        <div class=\"col-xs-3\">\n          <p class=\"h3 font-bold m-t\">7,230</p>\n          <p class=\"text-muted\">下单客户</p>\n        </div>\n      </div>\n    </footer>\n  </section>\n</section>\n"
-
-/***/ },
-/* 52 */
-/***/ function(module, exports) {
-
-	module.exports = "<section ng-if=\"vm.loading==true\">\n<a1-loader/>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"vm.loading==false\">\n  <header class=\"panel-heading\"> <a ui-sref=\"app.orders.list\" class=\"btn btn-info btn-sm\" ng-click=\"goback()\"><i class=\"glyphicon glyphicon-chevron-left\"></i> 返回</a>\n  </header>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\">订单编号:</td>\n        <td>{{vm.data.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单状态:</td>\n        <td>\n          <span class=\"badge\" ng-if=\"vm.data.Status==0\">处理中</span>\n          <span class=\"badge bg-success\" ng-if=\"vm.data.Status==1\">完成</span>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单总金额:</td>\n        <td>{{vm.data.TotalMoney|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单时间:</td>\n        <td>{{vm.data.Date|date:'yyyy-MM-dd hh:mm:ss'}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">送货地址:</td>\n        <td>{{vm.data.Address.Full}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">邮编:</td>\n        <td>{{vm.data.Address.ZipCode}}</td>\n      </tr>\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\">商品编码</th>\n        <th>商品名称</th>\n        <th>商品价格(元)</th>\n        <th>商品数量</th>\n        <th width=\"100\">总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--loading-->\n    <tbody ng-if=\"vm.loading\">\n      <tr>\n        <td colspan=\"5\">\n          <a1-loader/>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.data.Details && vm.data.Details.length>0 && vm.loading==false\">\n      <tr ng-repeat=\"item in vm.data.Details\">\n        <td>{{item.Product.Code}}</td>\n        <td>{{item.Product.Name}}</td>\n        <td>{{item.Product.UnitPrice|currency:\"￥\"}}</td>\n        <td>{{item.Price|currency:\"￥\"}}</td>\n        <td>{{item.Money*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n\n    </tbody>\n  </table>\n</section>\n"
-
-/***/ },
-/* 53 */
-/***/ function(module, exports) {
-
-	module.exports = "<section ng-if=\"vm.loading==true\">\n<a1-loader/>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage&&vm.loading==false\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>订单修改成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ui-sref=\"app.orders.list\" type=\"button\" class=\"btn btn-default\">返回列表</a>\n    </div>\n  </div>\n</section>\n<div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n</div>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage&&vm.loading==false\">\n  <header class=\"panel-heading\">订单表单</header>\n\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">订单号:</td>\n        <td>{{vm.formData.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">选择省市:</td>\n        <td>\n          <div class=\"form-group\">\n            <span>\n              <select  ng-model=\"vm.formData.Address.Province\" ng-change=\"vm.changeProvince(vm.formData.Address.Province)\">\n                <option style=\"font-size:14px;\" ng-repeat=\"item in vm.provinces\" value=\"{{item.name}}\">{{item.name}}</option>\n              </select>\n            </span>\n            <span>\n              <select class=\"selectpicker\" ng-model=\"vm.formData.Address.City\" ng-change=\"vm.changeCity(vm.formData.Address.City)\">\n                <option ng-repeat=\"city in vm.cities\" value=\"{{city.name}}\">{{city.name}}</option>\n              </select>\n            </span>\n          </div>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">邮编:</td>\n        <td>\n          <input style=\"width:100px;\" class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.ZipCode\"></input>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">街道地址:</td>\n        <td>\n          <input  class=\"input-sm form-control\" type=\"text\"  ng-model=\"vm.formData.Address.Street\"></input>\n        </td>\n      </tr>\n\n      <tr>\n        <td colspan=\"2\">\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.open()\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"i i-add-to-list icon\"></i> 添加商品</a>\n          </div>\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.clear()\" class=\"btn btn-danger btn-sm  pull-right\"><i class=\"i  i-cross2 icon\"></i> 清空商品</a>\n          </div>\n        </td>\n      </tr>\n\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\"></th>\n        <th>编号</th>\n        <th>商品编码</th>\n        <th>商品名称</th>\n        <th>价格(元)</th>\n        <th width=\"100\">数量</th>\n        <th>总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--not found-->\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length===0\">\n      <tr>\n        <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n          <i class='fa fa-shopping-cart  fa-5x'></i>\n          <div>还没有添加商品</div>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length>0 \">\n      <tr ng-repeat=\"item in vm.selectedItems\">\n\n        <td> <a ng-click=\"vm.remove($index)\" class=\"btn btn-xs btn-danger\"><i class=\"glyphicon glyphicon-remove\"></i> 删除</a></td>\n        <td> {{item.ID}}</td>\n        <td>{{item.Product.Code}} </td>\n        <td>{{item.Product.Name}}</td>\n        <td>{{item.Price|currency:\"￥\"}}</td>\n        <td>\n          <input class=\"input-sm form-control\" type=\"number\" ng-model=\"item.Quantity\"></input>\n        </td>\n        <td>{{item.Price*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td colspan=\"7\" class=\"text-right\" style=\"font-size:16px;\">\n          <span class=\"label bg-warning\" style=\"font-size:14px;\">订单总金额：{{vm.total()|currency:\"￥\"}}</strong>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <footer class=\"panel-footer bg-light lter\">\n\n\n    <button type=\"submit\" ng-click=\"vm.save()\" class=\"btn btn-primary\">{{vm.loading==true?\"保存中...\":\"修改订单信息\"}}</button>\n    <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n  </footer>\n</section>\n<a1-product-filter show=\"vm.show\" selected-items=\"vm.selectedItems\" />\n"
-
-/***/ },
 /* 54 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 订单管理 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-12\">\n      <form>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" class=\"input-sm form-control\" ng-model=\"vm.beginDate\">\n        </div>\n        <div class=\"btn-group m-r\">\n          -\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" class=\"input-sm form-control\" ng-model=\"vm.endDate\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"text\" class=\"input-sm form-control\" ng-model=\"vm.query.code\" placeholder=\"订单号\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <button class=\"btn btn-sm btn-default\" type=\"submit\" ng-click=\"vm.search()\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </div>\n        <div class=\"btn-group m-r pull-right\">\n          <a ui-sref=\"app.orders.new\" class=\"btn btn-primary btn-sm  pull-right\"><i class=\"glyphicon glyphicon-plus\"></i> 新建订单</a>\n        </div>\n      </form>\n    </div>\n\n  </div>\n  </div>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"80\">编号</th>\n          <th width=\"80\">状态</th>\n          <th width=\"100\">金额</th>\n          <th>地址</th>\n          <th width=\"200\">日期</th>\n          <th width=\"90\">查看详情</th>\n          <th width=\"60\">编辑</th>\n          <th width=\"60\">删除</th>\n        </tr>\n      </thead>\n\n      <tbody ng-if=\"vm.errorMessage&& vm.loading==false\">\n        <tr>\n          <td colspan='8'>\n            <div class=\"alert alert-danger\">\n              {{vm.errorMessage}}\n            </div>\n          </td>\n        </tr>\n      </tbody>\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr>\n          <td colspan=\"8\">\n            <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-shopping-cart fa-5x'></i>\n            <div>没有找到相关订单</div>\n          </td>\n        </tr>\n      </tbody>\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td> {{item.Code}}</td>\n          <td>\n            <span class=\"badge\" ng-if=\"item.Status==0\">处理中</span>\n            <span class=\"badge bg-success\" ng-if=\"item.Status==1\">完成</span>\n          </td>\n          <td>{{item.TotalMoney|currency:\"￥\"}}</td>\n          <td>{{item.Address.Full}}</td>\n          <td>{{item.Date|date:'yyyy-MM-dd hh:mm:ss'}}</td>\n          <td><a ui-sref=\"app.orders.detail({id:item.ID})\" class=\"btn btn-default btn-sm\"> 查看详情 </i></a></td>\n          <td><a ui-sref=\"app.orders.edit({id:item.ID})\" class=\"btn btn-default btn-sm\"> 编辑 </i></a></td>\n          <td>\n            <a class=\"btn btn-danger btn-sm  pull-right\" ng-click=\"vm.remove(item.ID)\">删除</a>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging page=\"vm.query.pageNumber\" ul-class=\"pagination pagination-sm m-t-none m-b-none\" page-size=\"10\" total=\"vm.data.total\" show-prev-next=true paging-action=\"vm.go(page)\">\n      </div>\n    </div>\n    </div>\n  </footer>\n</section>\n"
+	module.exports = "<section class=\"panel\">\n  <header class=\"panel-heading\"> 书籍列表</header>\n  <table>\n    <thead>\n    <tr>\n      <td>书名</td>\n      <td>ISBN</td>\n    </tr>\n    </thead>\n    <tr ng-repeat=\"item in vm.data.items\" class=\"table-responsive\">\n      <td>\n        {{item.BookName}}\n      </td>\n      <td>\n        {{item.ISBNCode}}\n      </td>\n    </tr>\n  </table>\n\n</section>\n"
 
 /***/ },
 /* 55 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>订单添加成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ng-click=\"vm.reload()\" class=\"btn btn-primary ng-binding\">继续添加订单</a>\n      <a ui-sref=\"app.orders.list\" type=\"button\" class=\"btn btn-default\">返回列表</a>\n    </div>\n  </div>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage\">\n  <header class=\"panel-heading\">订单表单</header>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">订单号:</td>\n        <td>{{vm.formData.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">选择省市:</td>\n        <td>\n          <div class=\"form-group\">\n            <span>\n              <select  ng-model=\"vm.formData.Address.Province\" ng-change=\"vm.changeProvince(vm.formData.Address.Province)\">\n                <option style=\"font-size:14px;\" ng-repeat=\"item in vm.provinces\" value=\"{{item.name}}\">{{item.name}}</option>\n              </select>\n            </span>\n            <span>\n              <select class=\"selectpicker\" ng-model=\"vm.formData.Address.City\" ng-change=\"vm.changeCity(vm.formData.Address.City)\">\n                <option ng-repeat=\"city in vm.cities\" value=\"{{city.name}}\">{{city.name}}</option>\n              </select>\n            </span>\n          </div>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">邮编:</td>\n        <td>\n          <input style=\"width:100px;\" class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.ZipCode\"></input>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">街道地址:</td>\n        <td>\n          <input  class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.Street\"></input>\n        </td>\n      </tr>\n\n      <tr>\n        <td colspan=\"2\">\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.open()\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"i i-add-to-list icon\"></i> 添加商品</a>\n          </div>\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.clear()\" class=\"btn btn-danger btn-sm  pull-right\"><i class=\"i  i-cross2 icon\"></i> 清空商品</a>\n          </div>\n        </td>\n      </tr>\n\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\"></th>\n        <th>编号</th>\n        <th>商品编码</th>\n        <th>商品名称</th>\n        <th>价格(元)</th>\n        <th width=\"100\">数量</th>\n        <th>总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--not found-->\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length===0\">\n      <tr>\n        <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n          <i class='fa fa-shopping-cart  fa-5x'></i>\n          <div>还没有添加商品</div>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length>0 \">\n      <tr ng-repeat=\"item in vm.selectedItems\">\n        <td> <a ng-click=\"vm.remove($index)\" class=\"btn btn-xs btn-danger\"><i class=\"glyphicon glyphicon-remove\"></i> 删除</a></td>\n        <td> {{item.ID}}</td>\n        <td>{{item.Code}}</td>\n        <td>{{item.Name}}</td>\n        <td>{{item.UnitPrice|currency:\"￥\"}}</td>\n        <td>\n          <input class=\"input-sm form-control\" type=\"number\" ng-model=\"item.Quantity\"></input>\n        </td>\n        <td>{{item.UnitPrice*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td colspan=\"7\" class=\"text-right\" style=\"font-size:16px;\">\n          <span class=\"label bg-warning\" style=\"font-size:14px;\">订单总金额：{{vm.total()|currency:\"￥\"}}</strong>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <footer class=\"panel-footer bg-light lter\">\n    <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n    </div>\n\n    <button type=\"submit\" ng-click=\"vm.save()\" class=\"btn btn-primary\">{{vm.loading==true?\"保存中...\":\"保存订单信息\"}}</button>\n    <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n  </footer>\n</section>\n<a1-product-filter show=\"vm.show\" selected-items=\"vm.selectedItems\" />\n"
+	module.exports = "\n<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> Demo列表 </header>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"100\">商品编码</th>\n          <th>商品名称</th>\n          <th width=\"100\">单价</th>\n        </tr>\n      </thead>\n\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr >\n          <td colspan='6'>\n          <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='6' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-umbrella fa-5x'></i>\n            <div>没有找到相关商品</div>\n          </td>\n        </tr>\n      </tbody>\n      <!--list items-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td>{{item.Code}} </td>\n          <td style=\"text-align:left;padding-left:10px;\">{{item.Name}}</td>\n          <td>  {{item.UnitPrice|currency:\"￥\"}}</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging\n          page=\"vm.query.pageNumber\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n\n    </div>\n  </footer>\n</section>\n"
 
 /***/ },
 /* 56 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 销货单管理 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-12\">\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"2015-09-12\">\n        </div>\n        <div class=\"btn-group m-r\">\n          -\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"2016-09-14\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"text\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"商品名称\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <button class=\"btn btn-sm btn-default\" type=\"button\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </div>\n        <div class=\"btn-group m-r pull-right\">\n          <a href=\"#\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"glyphicon glyphicon-plus\"></i> 新建销货单</a>\n        </div>\n      </div>\n    </div>\n  </div>\n    <div class=\"table-responsive\">\n      <table class=\"table table-striped b-t b-light\">\n        <thead>\n          <tr>\n            <th width=\"20\">\n              <label class=\"checkbox m-l m-t-none m-b-none i-checks\">\n                <input type=\"checkbox\"><i></i></label>\n            </th>\n            <th>编号</th>\n            <th>状态</th>\n            <th>金额</th>\n            <th>地址</th>\n            <th>日期</th>\n          </tr>\n        </thead>\n\n        <!--loading-->\n        <tbody ng-if=\"vm.loading\">\n          <tr >\n            <td colspan=\"8\">\n            <a1-loader/>\n            </td>\n          </tr>\n        </tbody>\n        <!--not found-->\n        <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false\">\n          <tr >\n            <td colspan='6'>\n            没有相关数据\n            </td>\n          </tr>\n        </tbody>\n        <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n          <tr ng-repeat=\"item in vm.data.items\">\n            <td>\n              <label class=\"checkbox m-l m-t-none m-b-none i-checks\">\n                <input type=\"checkbox\" name=\"post[]\"><i></i></label>\n            </td>\n            <td> {{item.Code}}</td>\n            <td>{{item.Status}}</td>\n            <td>{{item.TotalMoney}}</td>\n            <td>{{item.Address.Full}}</td>\n            <td>{{item.Date}}</td>\n          </tr>\n\n        </tbody>\n      </table>\n    </div>\n    <!--page-->\n    <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n      <div class=\"row\">\n        <div class=\"col-sm-4 hidden-xs\">\n          <!--button-->\n        </div>\n        <div paging\n        class=\"col-sm-8 text-right text-center-xs\"\n          page=\"vm.pageIndex\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n    </footer>\n</section>\n"
+	module.exports = "<section class=\"scrollable padder\">\n  <div class=\"m-b-md\">\n    <div class=\"row\">\n      <div class=\"col-sm-6\">\n        <h3 class=\"m-b-none\">测试首页</h3>\n        <small>--</small>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"text-right text-left-xs\">\n          <div class=\"sparkline m-l m-r-lg pull-right\" data-type=\"bar\" data-height=\"35\" data-bar-width=\"6\" data-bar-spacing=\"2\" data-bar-color=\"#fb6b5b\">\n            <canvas width=\"86\" height=\"35\" style=\"display: inline-block; width: 86px; height: 35px; vertical-align: top;\"></canvas>\n          </div>\n          <div class=\"m-t-md\">\n            <span class=\"text-uc\">商品数量</span>\n            <div class=\"h4 m-n\">\n              <strong>1,120,100</strong>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <section class=\"panel panel-default\">\n    <header class=\"panel-heading font-bold\">销售状况表</header>\n    <div class=\"panel-body\">\n      <div id=\"flot-1ine\" style=\"height: 250px; padding: 0px; position: relative;\">\n        <canvas class=\"flot-base\" width=\"2736\" height=\"500\" style=\"direction: ltr; position: absolute; left: 0px; top: 0px; width: 1368px; height: 250px;\"></canvas>\n        <div class=\"flot-text\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);\">\n          <div class=\"flot-x-axis flot-x1-axis xAxis x1Axis\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;\">\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 12px; text-align: center;\">0.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 133px; text-align: center;\">1.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 254px; text-align: center;\">2.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 376px; text-align: center;\">3.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 497px; text-align: center;\">4.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 619px; text-align: center;\">5.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 740px; text-align: center;\">6.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 862px; text-align: center;\">7.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 983px; text-align: center;\">8.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1105px; text-align: center;\">9.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1223px; text-align: center;\">10.0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; max-width: 114px; top: 231px; left: 1344px; text-align: center;\">11.0</div>\n          </div>\n          <div class=\"flot-y-axis flot-y1-axis yAxis y1Axis\" style=\"position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;\">\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 217px; left: 8px; text-align: right;\">0</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 174px; left: 8px; text-align: right;\">5</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 130px; left: 1px; text-align: right;\">10</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 87px; left: 1px; text-align: right;\">15</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 43px; left: 1px; text-align: right;\">20</div>\n            <div class=\"flot-tick-label tickLabel\" style=\"position: absolute; top: 0px; left: 1px; text-align: right;\">25</div>\n          </div>\n        </div>\n        <canvas class=\"flot-overlay\" width=\"2736\" height=\"500\" style=\"direction: ltr; position: absolute; left: 0px; top: 0px; width: 1368px; height: 250px;\"></canvas>\n      </div>\n    </div>\n    <footer class=\"panel-footer bg-white\">\n      <div class=\"row text-center no-gutter\">\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">5,860</p>\n          <p class=\"text-muted\">订单</p>\n        </div>\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">10,450</p>\n          <p class=\"text-muted\">销售金额</p>\n        </div>\n        <div class=\"col-xs-3 b-r b-light\">\n          <p class=\"h3 font-bold m-t\">21,230</p>\n          <p class=\"text-muted\">销售数量</p>\n        </div>\n        <div class=\"col-xs-3\">\n          <p class=\"h3 font-bold m-t\">7,230</p>\n          <p class=\"text-muted\">下单客户</p>\n        </div>\n      </div>\n    </footer>\n  </section>\n</section>\n"
 
 /***/ },
 /* 57 */
 /***/ function(module, exports) {
 
-	module.exports = "<section ng-if=\"vm.loading\">\n  <a1-loader/>\n</section>\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.loading\">\n  <header class=\"header\">\n    <style>\n      padding {\n        padding-top: 5px;\n      }\n    </style>\n\n    <p style=\"margin-left:10px\">\n       <a ui-sref=\"app.products.list\" class=\"btn btn-info btn-sm\" ng-click=\"goback()\"><i class=\"glyphicon glyphicon-chevron-left\"></i> 返回</a> </header>\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品编码:</label>\n        <div class=\"col-lg-11  \">\n          {{vm.formData.Code}}\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品名称:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.Code}}\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">参考价格:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.UnitPrice|currency:\"￥\"}}\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品描述:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.Description}}\n        </div>\n      </div>\n    </form>\n\n  </div>\n</section>\n"
+	module.exports = "<section ng-if=\"vm.loading==true\">\n<a1-loader/>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"vm.loading==false\">\n  <header class=\"panel-heading\"> <a ui-sref=\"app.orders.list\" class=\"btn btn-info btn-sm\" ng-click=\"goback()\"><i class=\"glyphicon glyphicon-chevron-left\"></i> 返回</a>\n  </header>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\">订单编号:</td>\n        <td>{{vm.data.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单状态:</td>\n        <td>\n          <span class=\"badge\" ng-if=\"vm.data.Status==0\">处理中</span>\n          <span class=\"badge bg-success\" ng-if=\"vm.data.Status==1\">完成</span>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单总金额:</td>\n        <td>{{vm.data.TotalMoney|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">订单时间:</td>\n        <td>{{vm.data.Date|date:'yyyy-MM-dd hh:mm:ss'}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">送货地址:</td>\n        <td>{{vm.data.Address.Full}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\">邮编:</td>\n        <td>{{vm.data.Address.ZipCode}}</td>\n      </tr>\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\">商品编码</th>\n        <th>商品名称</th>\n        <th>商品价格(元)</th>\n        <th>商品数量</th>\n        <th width=\"100\">总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--loading-->\n    <tbody ng-if=\"vm.loading\">\n      <tr>\n        <td colspan=\"5\">\n          <a1-loader/>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.data.Details && vm.data.Details.length>0 && vm.loading==false\">\n      <tr ng-repeat=\"item in vm.data.Details\">\n        <td>{{item.Product.Code}}</td>\n        <td>{{item.Product.Name}}</td>\n        <td>{{item.Product.UnitPrice|currency:\"￥\"}}</td>\n        <td>{{item.Price|currency:\"￥\"}}</td>\n        <td>{{item.Money*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n\n    </tbody>\n  </table>\n</section>\n"
 
 /***/ },
 /* 58 */
 /***/ function(module, exports) {
 
-	module.exports = "<section ng-if=\"vm.loading\">\n  <a1-loader/>\n</section>\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.loading\">\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n    <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n    </div>\n    <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> 商品信息保存成功\n    </div>\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品编码</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" class=\"form-control\" name=\"Code\" ng-model=\"vm.formData.Code\" disabled placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Code.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品编码不能为空</div>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品名称</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" name=\"Name\" ng-model=\"vm.formData.Name\" class=\"form-control\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Name.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品名称不能为空</div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">参考价格</label>\n        <div class=\"col-lg-2 \">\n          <div class=\"input-group m-b\">\n            <input type=\"text\" name=\"UnitPrice\" ng-model=\"vm.formData.UnitPrice\" class=\"form-control\" placeholder=\"0.00\" required>\n            <span class=\"input-group-addon\">元</span>\n\n          </div>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.UnitPrice.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">请填写参考价格</div>\n          </div>\n        </div>\n\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品描述</label>\n        <div class=\"col-lg-10\">\n          <textarea ng-model=\"vm.formData.Description\" style=\"height:150px;\" class=\"form-control\" placeholder=\"\"></textarea>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"col-lg-offset-2 col-lg-10\">\n          <button type=\"submit\" ng-click=\"vm.save(productForm.$valid)\" class=\"btn btn-primary\">{{vm.loading===true?'保存中...':'保存修改信息'}}</button>\n          <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n        </div>\n      </div>\n    </form>\n  </div>\n</section>\n"
+	module.exports = "<section ng-if=\"vm.loading==true\">\n<a1-loader/>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage&&vm.loading==false\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>订单修改成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ui-sref=\"app.orders.list\" type=\"button\" class=\"btn btn-default\">返回列表</a>\n    </div>\n  </div>\n</section>\n<div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n  <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n</div>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage&&vm.loading==false\">\n  <header class=\"panel-heading\">订单表单</header>\n\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">订单号:</td>\n        <td>{{vm.formData.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">选择省市:</td>\n        <td>\n          <div class=\"form-group\">\n            <span>\n              <select  ng-model=\"vm.formData.Address.Province\" ng-change=\"vm.changeProvince(vm.formData.Address.Province)\">\n                <option style=\"font-size:14px;\" ng-repeat=\"item in vm.provinces\" value=\"{{item.name}}\">{{item.name}}</option>\n              </select>\n            </span>\n            <span>\n              <select class=\"selectpicker\" ng-model=\"vm.formData.Address.City\" ng-change=\"vm.changeCity(vm.formData.Address.City)\">\n                <option ng-repeat=\"city in vm.cities\" value=\"{{city.name}}\">{{city.name}}</option>\n              </select>\n            </span>\n          </div>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">邮编:</td>\n        <td>\n          <input style=\"width:100px;\" class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.ZipCode\"></input>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">街道地址:</td>\n        <td>\n          <input  class=\"input-sm form-control\" type=\"text\"  ng-model=\"vm.formData.Address.Street\"></input>\n        </td>\n      </tr>\n\n      <tr>\n        <td colspan=\"2\">\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.open()\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"i i-add-to-list icon\"></i> 添加商品</a>\n          </div>\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.clear()\" class=\"btn btn-danger btn-sm  pull-right\"><i class=\"i  i-cross2 icon\"></i> 清空商品</a>\n          </div>\n        </td>\n      </tr>\n\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\"></th>\n        <th>编号</th>\n        <th>商品编码</th>\n        <th>商品名称</th>\n        <th>价格(元)</th>\n        <th width=\"100\">数量</th>\n        <th>总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--not found-->\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length===0\">\n      <tr>\n        <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n          <i class='fa fa-shopping-cart  fa-5x'></i>\n          <div>还没有添加商品</div>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length>0 \">\n      <tr ng-repeat=\"item in vm.selectedItems\">\n\n        <td> <a ng-click=\"vm.remove($index)\" class=\"btn btn-xs btn-danger\"><i class=\"glyphicon glyphicon-remove\"></i> 删除</a></td>\n        <td> {{item.ID}}</td>\n        <td>{{item.Product.Code}} </td>\n        <td>{{item.Product.Name}}</td>\n        <td>{{item.Price|currency:\"￥\"}}</td>\n        <td>\n          <input class=\"input-sm form-control\" type=\"number\" ng-model=\"item.Quantity\"></input>\n        </td>\n        <td>{{item.Price*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td colspan=\"7\" class=\"text-right\" style=\"font-size:16px;\">\n          <span class=\"label bg-warning\" style=\"font-size:14px;\">订单总金额：{{vm.total()|currency:\"￥\"}}</strong>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <footer class=\"panel-footer bg-light lter\">\n\n\n    <button type=\"submit\" ng-click=\"vm.save()\" class=\"btn btn-primary\">{{vm.loading==true?\"保存中...\":\"修改订单信息\"}}</button>\n    <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n  </footer>\n</section>\n<a1-product-filter show=\"vm.show\" selected-items=\"vm.selectedItems\" />\n"
 
 /***/ },
 /* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 商品列表 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-5 m-b-xs\">\n      <a ui-sref=\"app.products.new\" class=\"btn btn-primary btn-sm\"><i class=\"glyphicon glyphicon-plus\"></i> 新增</a>\n      <a href=\"#\" class=\"btn btn-default btn-sm\"><i class=\"glyphicon glyphicon-export\"></i> 导出</a>\n      <a href=\"#\" class=\"btn btn-default btn-sm\"><i class=\"glyphicon glyphicon-import\"></i> 导入</a>\n\n      <div class=\"btn-group\">\n        <a class=\" btn btn-default dropdown-toggle btn-sm\" data-toggle=\"dropdown\">操作\n                <span class=\"caret\"></span>\n              </a>\n        <ul class=\"dropdown-menu\">\n          <li><a href=\"#\">下载商品</a></li>\n          <li><a href=\"#\">一键铺货</a></li>\n          <li><a href=\"#\">一键更新</a></li>\n          <li><a href=\"#\">算成本</a></li>\n        </ul>\n\n      </div>\n    </div>\n    <div class=\"col-sm-4 m-b-xs\">\n\n    </div>\n    <div class=\"col-sm-3\">\n      <form>\n      <div class=\"input-group\">\n        <input type=\"text\" class=\"input-sm form-control\" ng-model=\"vm.query.codeOrName\" placeholder=\"商品名称或编码\">\n        <span class=\"input-group-btn\">\n          <button  class=\"btn btn-sm btn-default\" type=\"submit\" ng-click=\"vm.search()\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </span>\n\n      </div>\n    </form>\n    </div>\n  </div>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"100\">商品编码</th>\n          <th>商品名称</th>\n          <th width=\"100\">单价</th>\n          <th width=\"100\">查看详情</th>\n          <th width=\"80\">编辑</th>\n          <th width=\"80\">删除</th>\n        </tr>\n      </thead>\n\n      <tbody ng-if=\"vm.errorMessage && vm.loading==false\">\n        <tr >\n          <td colspan='6'>\n          <div class=\"alert alert-danger\">\n            {{vm.errorMessage}}\n           </div>\n          </td>\n        </tr>\n      </tbody>\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr >\n          <td colspan='6'>\n          <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='6' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-umbrella fa-5x'></i>\n            <div>没有找到相关商品</div>\n          </td>\n        </tr>\n      </tbody>\n      <!--list items-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td>{{item.Code}} </td>\n          <td style=\"text-align:left;padding-left:10px;\">{{item.Name}}</td>\n          <td>  {{item.UnitPrice|currency:\"￥\"}}</td>\n          <td>\n            <a ui-sref=\"app.products.detail({id:item.ID})\" class=\"btn btn-default btn-sm\"> 查看详情 </i></a>\n          </td>\n          <td>\n            <a ui-sref=\"app.products.edit({id:item.ID})\" class=\"btn btn-primary btn-sm\"> 编辑</i></a>\n          </td>\n          <td>\n            <a class=\"btn btn-danger btn-sm  pull-right\" ng-click=\"vm.delete(item.ID)\">删除</a>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging\n          page=\"vm.query.pageNumber\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n\n    </div>\n  </footer>\n</section>\n"
+	module.exports = "<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 订单管理 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-12\">\n      <form>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" class=\"input-sm form-control\" ng-model=\"vm.beginDate\">\n        </div>\n        <div class=\"btn-group m-r\">\n          -\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" class=\"input-sm form-control\" ng-model=\"vm.endDate\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"text\" class=\"input-sm form-control\" ng-model=\"vm.query.code\" placeholder=\"订单号\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <button class=\"btn btn-sm btn-default\" type=\"submit\" ng-click=\"vm.search()\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </div>\n        <div class=\"btn-group m-r pull-right\">\n          <a ui-sref=\"app.orders.new\" class=\"btn btn-primary btn-sm  pull-right\"><i class=\"glyphicon glyphicon-plus\"></i> 新建订单</a>\n        </div>\n      </form>\n    </div>\n\n  </div>\n  </div>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"80\">编号</th>\n          <th width=\"80\">状态</th>\n          <th width=\"100\">金额</th>\n          <th>地址</th>\n          <th width=\"200\">日期</th>\n          <th width=\"90\">查看详情</th>\n          <th width=\"60\">编辑</th>\n          <th width=\"60\">删除</th>\n        </tr>\n      </thead>\n\n      <tbody ng-if=\"vm.errorMessage&& vm.loading==false\">\n        <tr>\n          <td colspan='8'>\n            <div class=\"alert alert-danger\">\n              {{vm.errorMessage}}\n            </div>\n          </td>\n        </tr>\n      </tbody>\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr>\n          <td colspan=\"8\">\n            <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-shopping-cart fa-5x'></i>\n            <div>没有找到相关订单</div>\n          </td>\n        </tr>\n      </tbody>\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td> {{item.Code}}</td>\n          <td>\n            <span class=\"badge\" ng-if=\"item.Status==0\">处理中</span>\n            <span class=\"badge bg-success\" ng-if=\"item.Status==1\">完成</span>\n          </td>\n          <td>{{item.TotalMoney|currency:\"￥\"}}</td>\n          <td>{{item.Address.Full}}</td>\n          <td>{{item.Date|date:'yyyy-MM-dd hh:mm:ss'}}</td>\n          <td><a ui-sref=\"app.orders.detail({id:item.ID})\" class=\"btn btn-default btn-sm\"> 查看详情 </i></a></td>\n          <td><a ui-sref=\"app.orders.edit({id:item.ID})\" class=\"btn btn-default btn-sm\"> 编辑 </i></a></td>\n          <td>\n            <a class=\"btn btn-danger btn-sm  pull-right\" ng-click=\"vm.remove(item.ID)\">删除</a>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging page=\"vm.query.pageNumber\" ul-class=\"pagination pagination-sm m-t-none m-b-none\" page-size=\"10\" total=\"vm.data.total\" show-prev-next=true paging-action=\"vm.go(page)\">\n      </div>\n    </div>\n    </div>\n  </footer>\n</section>\n"
 
 /***/ },
 /* 60 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>商品添加成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ng-click=\"vm.reload()\" class=\"btn btn-primary ng-binding\">继续添加商品</a>\n      <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回列表</button>\n    </div>\n  </div>\n\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage\">\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品编码</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" class=\"form-control\" name=\"Code\" ng-model=\"vm.formData.Code\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Code.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品编码不能为空</div>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品名称</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" name=\"Name\" ng-model=\"vm.formData.Name\" class=\"form-control\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Name.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品名称不能为空</div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">参考价格</label>\n        <div class=\"col-lg-2 \">\n          <div class=\"input-group m-b\">\n            <input type=\"text\" name=\"UnitPrice\" ng-model=\"vm.formData.UnitPrice\" class=\"form-control\" placeholder=\"0.00\" required>\n            <span class=\"input-group-addon\">元</span>\n\n          </div>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.UnitPrice.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">请填写参考价格</div>\n          </div>\n        </div>\n\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品描述</label>\n        <div class=\"col-lg-10\">\n          <textarea ng-model=\"vm.formData.Description\"  style=\"height:150px;\" class=\"form-control\" placeholder=\"\"></textarea>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"col-lg-offset-2 col-lg-10\">\n          <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n          </div>\n          <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> 商品创建成功\n          </div>\n          <button type=\"submit\" ng-click=\"vm.create(productForm.$valid)\" class=\"btn btn-primary\">{{vm.loading===true?'保存中...':'保存信息'}}</button>\n          <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n        </div>\n      </div>\n    </form>\n  </div>\n</section>\n"
+	module.exports = "<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>订单添加成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ng-click=\"vm.reload()\" class=\"btn btn-primary ng-binding\">继续添加订单</a>\n      <a ui-sref=\"app.orders.list\" type=\"button\" class=\"btn btn-default\">返回列表</a>\n    </div>\n  </div>\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage\">\n  <header class=\"panel-heading\">订单表单</header>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">订单号:</td>\n        <td>{{vm.formData.Code}}</td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">选择省市:</td>\n        <td>\n          <div class=\"form-group\">\n            <span>\n              <select  ng-model=\"vm.formData.Address.Province\" ng-change=\"vm.changeProvince(vm.formData.Address.Province)\">\n                <option style=\"font-size:14px;\" ng-repeat=\"item in vm.provinces\" value=\"{{item.name}}\">{{item.name}}</option>\n              </select>\n            </span>\n            <span>\n              <select class=\"selectpicker\" ng-model=\"vm.formData.Address.City\" ng-change=\"vm.changeCity(vm.formData.Address.City)\">\n                <option ng-repeat=\"city in vm.cities\" value=\"{{city.name}}\">{{city.name}}</option>\n              </select>\n            </span>\n          </div>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">邮编:</td>\n        <td>\n          <input style=\"width:100px;\" class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.ZipCode\"></input>\n        </td>\n      </tr>\n      <tr>\n        <td width=\"100\" style=\"vertical-align: middle;\">街道地址:</td>\n        <td>\n          <input  class=\"input-sm form-control\" type=\"text\" ng-model=\"vm.formData.Address.Street\"></input>\n        </td>\n      </tr>\n\n      <tr>\n        <td colspan=\"2\">\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.open()\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"i i-add-to-list icon\"></i> 添加商品</a>\n          </div>\n          <div class=\"btn-group m-r\">\n            <a ng-click=\"vm.clear()\" class=\"btn btn-danger btn-sm  pull-right\"><i class=\"i  i-cross2 icon\"></i> 清空商品</a>\n          </div>\n        </td>\n      </tr>\n\n    </tbody>\n  </table>\n  <table class=\"table table-striped b-t b-light\">\n    <thead>\n      <tr>\n        <th width=\"100\"></th>\n        <th>编号</th>\n        <th>商品编码</th>\n        <th>商品名称</th>\n        <th>价格(元)</th>\n        <th width=\"100\">数量</th>\n        <th>总计(元)</th>\n      </tr>\n    </thead>\n\n    <!--not found-->\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length===0\">\n      <tr>\n        <td colspan='7' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n          <i class='fa fa-shopping-cart  fa-5x'></i>\n          <div>还没有添加商品</div>\n        </td>\n      </tr>\n    </tbody>\n    <tbody ng-if=\"vm.selectedItems && vm.selectedItems.length>0 \">\n      <tr ng-repeat=\"item in vm.selectedItems\">\n        <td> <a ng-click=\"vm.remove($index)\" class=\"btn btn-xs btn-danger\"><i class=\"glyphicon glyphicon-remove\"></i> 删除</a></td>\n        <td> {{item.ID}}</td>\n        <td>{{item.Code}}</td>\n        <td>{{item.Name}}</td>\n        <td>{{item.UnitPrice|currency:\"￥\"}}</td>\n        <td>\n          <input class=\"input-sm form-control\" type=\"number\" ng-model=\"item.Quantity\"></input>\n        </td>\n        <td>{{item.UnitPrice*item.Quantity|currency:\"￥\"}}</td>\n      </tr>\n      <tr>\n        <td colspan=\"7\" class=\"text-right\" style=\"font-size:16px;\">\n          <span class=\"label bg-warning\" style=\"font-size:14px;\">订单总金额：{{vm.total()|currency:\"￥\"}}</strong>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <footer class=\"panel-footer bg-light lter\">\n    <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n    </div>\n\n    <button type=\"submit\" ng-click=\"vm.save()\" class=\"btn btn-primary\">{{vm.loading==true?\"保存中...\":\"保存订单信息\"}}</button>\n    <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n  </footer>\n</section>\n<a1-product-filter show=\"vm.show\" selected-items=\"vm.selectedItems\" />\n"
 
 /***/ },
 /* 61 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"hbox stretch\">\n  <section class=\"vbox\">\n    <section class=\"scrollable\">\n      <div class=\"row \">\n        <div class=\"col-md-12\">\n          <section id=\"content\" class=\"m-t-lg wrapper-md animated fadeInUp\">\n            <div class=\"container aside-xl\">\n              <img src=\"/img/sitelogo.png\"></img>\n              <br/>\n              <br/>\n              <section class=\"\">\n                <section class=\"panel panel-default\">\n                  <header class=\"panel-heading\">用户登陆</header>\n                  <div class=\"panel-body\">\n                    <form name=\"signinForm\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.login(signinForm.$valid)\">\n                      <div class=\"form-group\">\n                        <label>用户名:</label>\n                        <div ng-messages=\"signinForm.Account.$error\" ng-if=\"signinForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">用户名不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"Account\" ng-model=\"vm.formData.Account\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>密码:</label>\n                        <div ng-messages=\"signinForm.Password.$error\" ng-if=\"signinForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">密码不能为空</div>\n                        </div>\n                        <input type=\"password\" name=\"Password\" class=\"form-control\" placeholder=\"\" ng-model=\"vm.formData.Password\" required>\n                      </div>\n                      <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}} </div>\n                      <button type=\"submit\" class=\"btn btn-lg btn-primary btn-block\">{{vm.loading==true?'登录中...':'登录'}}</button>\n                      <div class=\"row\" style=\"text-align:center;margin-top:15px;\">\n                        <div class=\"col-md-12\"><a>忘记密码</a>&nbsp;&nbsp;&nbsp;&nbsp;<a ui-sref='signup'>注册账户</a></div>\n                      </div>\n                    </form>\n                  </div>\n                </section>\n              </section>\n            </div>\n          </section>\n        </div>\n      </div>\n\n      <footer id=\"footer\">\n        <div class=\"text-center padder\">\n\n          <p>\n            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>\n          </p>\n          <p>\n            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>\n          </p>\n          <p>\n            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>\n          </p>\n        </div>\n      </footer>\n    </section>\n  </section>\n</section>\n"
+	module.exports = "<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 销货单管理 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-12\">\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"2015-09-12\">\n        </div>\n        <div class=\"btn-group m-r\">\n          -\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"date\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"2016-09-14\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <input type=\"text\" id=\"appendedInput\" class=\"input-sm form-control\" placeholder=\"商品名称\">\n        </div>\n        <div class=\"btn-group m-r\">\n          <button class=\"btn btn-sm btn-default\" type=\"button\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </div>\n        <div class=\"btn-group m-r pull-right\">\n          <a href=\"#\" class=\"btn btn-info btn-sm  pull-right\"><i class=\"glyphicon glyphicon-plus\"></i> 新建销货单</a>\n        </div>\n      </div>\n    </div>\n  </div>\n    <div class=\"table-responsive\">\n      <table class=\"table table-striped b-t b-light\">\n        <thead>\n          <tr>\n            <th width=\"20\">\n              <label class=\"checkbox m-l m-t-none m-b-none i-checks\">\n                <input type=\"checkbox\"><i></i></label>\n            </th>\n            <th>编号</th>\n            <th>状态</th>\n            <th>金额</th>\n            <th>地址</th>\n            <th>日期</th>\n          </tr>\n        </thead>\n\n        <!--loading-->\n        <tbody ng-if=\"vm.loading\">\n          <tr >\n            <td colspan=\"8\">\n            <a1-loader/>\n            </td>\n          </tr>\n        </tbody>\n        <!--not found-->\n        <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false\">\n          <tr >\n            <td colspan='6'>\n            没有相关数据\n            </td>\n          </tr>\n        </tbody>\n        <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n          <tr ng-repeat=\"item in vm.data.items\">\n            <td>\n              <label class=\"checkbox m-l m-t-none m-b-none i-checks\">\n                <input type=\"checkbox\" name=\"post[]\"><i></i></label>\n            </td>\n            <td> {{item.Code}}</td>\n            <td>{{item.Status}}</td>\n            <td>{{item.TotalMoney}}</td>\n            <td>{{item.Address.Full}}</td>\n            <td>{{item.Date}}</td>\n          </tr>\n\n        </tbody>\n      </table>\n    </div>\n    <!--page-->\n    <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n      <div class=\"row\">\n        <div class=\"col-sm-4 hidden-xs\">\n          <!--button-->\n        </div>\n        <div paging\n        class=\"col-sm-8 text-right text-center-xs\"\n          page=\"vm.pageIndex\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n    </footer>\n</section>\n"
 
 /***/ },
 /* 62 */
 /***/ function(module, exports) {
 
-	module.exports = "<section class=\"hbox stretch\">\n  <section class=\"vbox\">\n    <section class=\"scrollable\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <section id=\"content\" class=\"animated fadeInUp \">\n            <div class=\"container aside-xl\">\n              <img src=\"/img/sitelogo.png\"></img>\n              <br/>\n              <br/>\n\n              <section>\n                <section class=\"panel panel-default\">\n                  <header class=\"panel-heading\">用户注册</header>\n                  <div class=\"panel-body\">\n                    <form name=\"signupForm\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.signup(signupForm.$valid)\">\n                      <div class=\"form-group\">\n                        <label>用户名:</label>\n                        <div ng-messages=\"signupForm.account.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">用户名不能为空</div>\n                          <div class=\"label bg-danger\" ng-message=\"unique-account\">用户名已经存在</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"account\"  ng-model=\"vm.formData.account\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>手机号:</label>\n                        <div ng-messages=\"signupForm.cellphone.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">手机号不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"cellphone\" ng-model=\"vm.formData.cellphone\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>邮箱:</label>\n                        <div ng-messages=\"signupForm.email.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">邮箱不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"email\" ng-model=\"vm.formData.email\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>设定密码:</label>\n                        <div ng-messages=\"signupForm.password.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">密码不能为空</div>\n                        </div>\n                        <input type=\"password\" name=\"password\" class=\"form-control\" placeholder=\"\" ng-model=\"vm.formData.password\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>重复密码:</label>\n                        <div ng-messages=\"vm.confirmPasswordForm.$error\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-if=\"vm.confirmPasswordForm.$error\">重复密码不一致</div>\n                        </div>\n                        <input type=\"password\" ng-model=\"vm.formData.confirmPassword\" name=\"confirmPassword\" class=\"form-control\" placeholder=\"\" required>\n                      </div>\n                      <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ok-sign\"></i> {{vm.successMessage}}\n                      </div>\n                      <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ok-sign\"></i> {{vm.errorMessage}}\n                      </div>\n                      <button type=\"submit\" class=\"btn btn-lg btn-primary btn-block\">{{vm.loading==true?'注册中...':'注册'}}</button>\n                      <br/>\n                      <p class=\"text-muted text-center\">\n                        <small>已经有账户?</small>\n                      </p>\n                      <a ui-sref=\"signin\" class=\"btn btn-lg btn-default btn-block\">登陆</a>\n                    </form>\n                  </div>\n                </section>\n              </section>\n            </div>\n          </section>\n        </div>\n      </div>\n\n      <footer id=\"footer\">\n        <div class=\"text-center padder\">\n          <p>\n            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>\n          </p>\n          <p>\n            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>\n          </p>\n          <p>\n            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>\n          </p>\n        </div>\n      </footer>\n    </section>\n  </section>\n</section>\n"
+	module.exports = "<section ng-if=\"vm.loading\">\n  <a1-loader/>\n</section>\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.loading\">\n  <header class=\"header\">\n    <style>\n      padding {\n        padding-top: 5px;\n      }\n    </style>\n\n    <p style=\"margin-left:10px\">\n       <a ui-sref=\"app.products.list\" class=\"btn btn-info btn-sm\" ng-click=\"goback()\"><i class=\"glyphicon glyphicon-chevron-left\"></i> 返回</a> </header>\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品编码:</label>\n        <div class=\"col-lg-11  \">\n          {{vm.formData.Code}}\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品名称:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.Code}}\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">参考价格:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.UnitPrice|currency:\"￥\"}}\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-1\">商品描述:</label>\n        <div class=\"col-lg-11\">\n          {{vm.formData.Description}}\n        </div>\n      </div>\n    </form>\n\n  </div>\n</section>\n"
 
 /***/ },
 /* 63 */
 /***/ function(module, exports) {
 
-	module.exports = "<div >\n<h1>店铺管理首页</h1>\n</div>\n"
+	module.exports = "<section ng-if=\"vm.loading\">\n  <a1-loader/>\n</section>\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.loading\">\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n    <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n    </div>\n    <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> 商品信息保存成功\n    </div>\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品编码</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" class=\"form-control\" name=\"Code\" ng-model=\"vm.formData.Code\" disabled placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Code.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品编码不能为空</div>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品名称</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" name=\"Name\" ng-model=\"vm.formData.Name\" class=\"form-control\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Name.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品名称不能为空</div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">参考价格</label>\n        <div class=\"col-lg-2 \">\n          <div class=\"input-group m-b\">\n            <input type=\"text\" name=\"UnitPrice\" ng-model=\"vm.formData.UnitPrice\" class=\"form-control\" placeholder=\"0.00\" required>\n            <span class=\"input-group-addon\">元</span>\n\n          </div>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.UnitPrice.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">请填写参考价格</div>\n          </div>\n        </div>\n\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品描述</label>\n        <div class=\"col-lg-10\">\n          <textarea ng-model=\"vm.formData.Description\" style=\"height:150px;\" class=\"form-control\" placeholder=\"\"></textarea>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"col-lg-offset-2 col-lg-10\">\n          <button type=\"submit\" ng-click=\"vm.save(productForm.$valid)\" class=\"btn btn-primary\">{{vm.loading===true?'保存中...':'保存修改信息'}}</button>\n          <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n        </div>\n      </div>\n    </form>\n  </div>\n</section>\n"
 
 /***/ },
 /* 64 */
 /***/ function(module, exports) {
 
-	module.exports = "ui.router";
+	module.exports = "\n<section class=\"panel panel-default content-box\">\n  <header class=\"panel-heading\"> 商品列表 </header>\n  <div class=\"row wrapper\">\n    <div class=\"col-sm-5 m-b-xs\">\n      <a ui-sref=\"app.products.new\" class=\"btn btn-primary btn-sm\"><i class=\"glyphicon glyphicon-plus\"></i> 新增</a>\n      <a href=\"#\" class=\"btn btn-default btn-sm\"><i class=\"glyphicon glyphicon-export\"></i> 导出</a>\n      <a href=\"#\" class=\"btn btn-default btn-sm\"><i class=\"glyphicon glyphicon-import\"></i> 导入</a>\n\n      <div class=\"btn-group\">\n        <a class=\" btn btn-default dropdown-toggle btn-sm\" data-toggle=\"dropdown\">操作\n                <span class=\"caret\"></span>\n              </a>\n        <ul class=\"dropdown-menu\">\n          <li><a href=\"#\">下载商品</a></li>\n          <li><a href=\"#\">一键铺货</a></li>\n          <li><a href=\"#\">一键更新</a></li>\n          <li><a href=\"#\">算成本</a></li>\n        </ul>\n\n      </div>\n    </div>\n    <div class=\"col-sm-4 m-b-xs\">\n\n    </div>\n    <div class=\"col-sm-3\">\n      <form>\n      <div class=\"input-group\">\n        <input type=\"text\" class=\"input-sm form-control\" ng-model=\"vm.query.codeOrName\" placeholder=\"商品名称或编码\">\n        <span class=\"input-group-btn\">\n          <button  class=\"btn btn-sm btn-default\" type=\"submit\" ng-click=\"vm.search()\"><i class=\"i i-search2 icon\"></i>搜索</button>\n        </span>\n\n      </div>\n    </form>\n    </div>\n  </div>\n  <div class=\"table-responsive\">\n    <table class=\"table table-striped b-t b-light\">\n      <thead>\n        <tr>\n          <th width=\"100\">商品编码</th>\n          <th>商品名称</th>\n          <th width=\"100\">单价</th>\n          <th width=\"100\">查看详情</th>\n          <th width=\"80\">编辑</th>\n          <th width=\"80\">删除</th>\n        </tr>\n      </thead>\n\n      <tbody ng-if=\"vm.errorMessage && vm.loading==false\">\n        <tr >\n          <td colspan='6'>\n          <div class=\"alert alert-danger\">\n            {{vm.errorMessage}}\n           </div>\n          </td>\n        </tr>\n      </tbody>\n      <!--loading-->\n      <tbody ng-if=\"vm.loading\">\n        <tr >\n          <td colspan='6'>\n          <a1-loader/>\n          </td>\n        </tr>\n      </tbody>\n      <!--not found-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length===0 && vm.loading==false && !vm.errorMessage\">\n        <tr>\n          <td colspan='6' height=\"200\" style=\"vertical-align: middle;text-align:center\">\n            <i class='fa fa-umbrella fa-5x'></i>\n            <div>没有找到相关商品</div>\n          </td>\n        </tr>\n      </tbody>\n      <!--list items-->\n      <tbody ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n        <tr ng-repeat=\"item in vm.data.items\">\n          <td>{{item.Code}} </td>\n          <td style=\"text-align:left;padding-left:10px;\">{{item.Name}}</td>\n          <td>  {{item.UnitPrice|currency:\"￥\"}}</td>\n          <td>\n            <a ui-sref=\"app.products.detail({id:item.ID})\" class=\"btn btn-default btn-sm\"> 查看详情 </i></a>\n          </td>\n          <td>\n            <a ui-sref=\"app.products.edit({id:item.ID})\" class=\"btn btn-primary btn-sm\"> 编辑</i></a>\n          </td>\n          <td>\n            <a class=\"btn btn-danger btn-sm  pull-right\" ng-click=\"vm.delete(item.ID)\">删除</a>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n  <!--page-->\n  <footer class=\"panel-footer\" ng-if=\"vm.data.items && vm.data.items.length>0 && vm.loading==false\">\n    <div class=\"row\">\n      <div class=\"col-sm-4 hidden-xs\">\n        <!--button-->\n      </div>\n      <div class=\"col-sm-8 text-right text-center-xs\">\n        <a1-paging\n          page=\"vm.query.pageNumber\"\n          ul-class=\"pagination pagination-sm m-t-none m-b-none\"\n          page-size=\"10\"\n          total=\"vm.data.total\"\n          show-prev-next=true\n          paging-action=\"vm.go(page)\">\n          </div>\n      </div>\n\n    </div>\n  </footer>\n</section>\n"
 
 /***/ },
 /* 65 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"panel panel-default content-box\" ng-if=\"vm.successMessage\">\n  <div class=\"panel-body\">\n    <div class=\"alert alert-success text-center\" style=\"font-size:16px\">\n      <i class=\"glyphicon glyphicon-ok\"></i>\n      <strong>商品添加成功</strong>\n    </div>\n    <div class=\"form-group text-center\">\n      <a ng-click=\"vm.reload()\" class=\"btn btn-primary ng-binding\">继续添加商品</a>\n      <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回列表</button>\n    </div>\n  </div>\n\n</section>\n\n<section class=\"panel panel-default content-box\" ng-if=\"!vm.successMessage\">\n  <header class=\"panel-heading\">商品信息</header>\n  <div class=\"panel-body\">\n\n    <form name=\"productForm\" class=\"form-horizontal\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.create(productForm.$valid)\">\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品编码</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" class=\"form-control\" name=\"Code\" ng-model=\"vm.formData.Code\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Code.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品编码不能为空</div>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品名称</label>\n        <div class=\"col-lg-10\">\n          <input type=\"text\" name=\"Name\" ng-model=\"vm.formData.Name\" class=\"form-control\" placeholder=\"\" required>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.Name.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">商品名称不能为空</div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">参考价格</label>\n        <div class=\"col-lg-2 \">\n          <div class=\"input-group m-b\">\n            <input type=\"text\" name=\"UnitPrice\" ng-model=\"vm.formData.UnitPrice\" class=\"form-control\" placeholder=\"0.00\" required>\n            <span class=\"input-group-addon\">元</span>\n\n          </div>\n          <span class=\"help-block m-b-none\"></span>\n          <div ng-messages=\"productForm.UnitPrice.$error\" ng-if=\"productForm.$submitted\" role=\"alert\">\n            <div class=\"label bg-danger\" ng-message=\"required\">请填写参考价格</div>\n          </div>\n        </div>\n\n      </div>\n      <div class=\"form-group\">\n        <label class=\"col-lg-2 control-label\">商品描述</label>\n        <div class=\"col-lg-10\">\n          <textarea ng-model=\"vm.formData.Description\"  style=\"height:150px;\" class=\"form-control\" placeholder=\"\"></textarea>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"col-lg-offset-2 col-lg-10\">\n          <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}}\n          </div>\n          <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n            <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> 商品创建成功\n          </div>\n          <button type=\"submit\" ng-click=\"vm.create(productForm.$valid)\" class=\"btn btn-primary\">{{vm.loading===true?'保存中...':'保存信息'}}</button>\n          <button type=\"button\" ng-click=\"vm.goback()\" class=\"btn btn-default\">返回</button>\n        </div>\n      </div>\n    </form>\n  </div>\n</section>\n"
+
+/***/ },
+/* 66 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"hbox stretch\">\n  <section class=\"vbox\">\n    <section class=\"scrollable\">\n      <div class=\"row \">\n        <div class=\"col-md-12\">\n          <section id=\"content\" class=\"m-t-lg wrapper-md animated fadeInUp\">\n            <div class=\"container aside-xl\">\n              <img src=\"/img/sitelogo.png\"></img>\n              <br/>\n              <br/>\n              <section class=\"\">\n                <section class=\"panel panel-default\">\n                  <header class=\"panel-heading\">用户登陆</header>\n                  <div class=\"panel-body\">\n                    <form name=\"signinForm\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.login(signinForm.$valid)\">\n                      <div class=\"form-group\">\n                        <label>用户名:</label>\n                        <div ng-messages=\"signinForm.Account.$error\" ng-if=\"signinForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">用户名不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"Account\" ng-model=\"vm.formData.Account\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>密码:</label>\n                        <div ng-messages=\"signinForm.Password.$error\" ng-if=\"signinForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">密码不能为空</div>\n                        </div>\n                        <input type=\"password\" name=\"Password\" class=\"form-control\" placeholder=\"\" ng-model=\"vm.formData.Password\" required>\n                      </div>\n                      <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ban-circle\"></i> {{vm.errorMessage}} </div>\n                      <button type=\"submit\" class=\"btn btn-lg btn-primary btn-block\">{{vm.loading==true?'登录中...':'登录'}}</button>\n                      <div class=\"row\" style=\"text-align:center;margin-top:15px;\">\n                        <div class=\"col-md-12\"><a>忘记密码</a>&nbsp;&nbsp;&nbsp;&nbsp;<a ui-sref='signup'>注册账户</a></div>\n                      </div>\n                    </form>\n                  </div>\n                </section>\n              </section>\n            </div>\n          </section>\n        </div>\n      </div>\n\n      <footer id=\"footer\">\n        <div class=\"text-center padder\">\n\n          <p>\n            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>\n          </p>\n          <p>\n            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>\n          </p>\n          <p>\n            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>\n          </p>\n        </div>\n      </footer>\n    </section>\n  </section>\n</section>\n"
+
+/***/ },
+/* 67 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"hbox stretch\">\n  <section class=\"vbox\">\n    <section class=\"scrollable\">\n      <div class=\"row\">\n        <div class=\"col-md-12\">\n          <section id=\"content\" class=\"animated fadeInUp \">\n            <div class=\"container aside-xl\">\n              <img src=\"/img/sitelogo.png\"></img>\n              <br/>\n              <br/>\n\n              <section>\n                <section class=\"panel panel-default\">\n                  <header class=\"panel-heading\">用户注册</header>\n                  <div class=\"panel-body\">\n                    <form name=\"signupForm\" autocomplete=\"off\" novalidate=\"\" ng-submit=\"vm.signup(signupForm.$valid)\">\n                      <div class=\"form-group\">\n                        <label>用户名:</label>\n                        <div ng-messages=\"signupForm.account.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">用户名不能为空</div>\n                          <div class=\"label bg-danger\" ng-message=\"unique-account\">用户名已经存在</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"account\"  ng-model=\"vm.formData.account\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>手机号:</label>\n                        <div ng-messages=\"signupForm.cellphone.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">手机号不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"cellphone\" ng-model=\"vm.formData.cellphone\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>邮箱:</label>\n                        <div ng-messages=\"signupForm.email.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">邮箱不能为空</div>\n                        </div>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"\" name=\"email\" ng-model=\"vm.formData.email\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>设定密码:</label>\n                        <div ng-messages=\"signupForm.password.$error\" ng-if=\"signupForm.$submitted\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-message=\"required\">密码不能为空</div>\n                        </div>\n                        <input type=\"password\" name=\"password\" class=\"form-control\" placeholder=\"\" ng-model=\"vm.formData.password\" required>\n                      </div>\n                      <div class=\"form-group\">\n                        <label>重复密码:</label>\n                        <div ng-messages=\"vm.confirmPasswordForm.$error\" role=\"alert\">\n                          <div class=\"label bg-danger\" ng-if=\"vm.confirmPasswordForm.$error\">重复密码不一致</div>\n                        </div>\n                        <input type=\"password\" ng-model=\"vm.formData.confirmPassword\" name=\"confirmPassword\" class=\"form-control\" placeholder=\"\" required>\n                      </div>\n                      <div class=\"alert alert-success\" ng-if=\"vm.successMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ok-sign\"></i> {{vm.successMessage}}\n                      </div>\n                      <div class=\"alert alert-danger\" ng-if=\"vm.errorMessage\">\n                        <button type=\"button\" class=\"close\" data-dismiss=\"alert\">×</button> <i class=\"fa fa-ok-sign\"></i> {{vm.errorMessage}}\n                      </div>\n                      <button type=\"submit\" class=\"btn btn-lg btn-primary btn-block\">{{vm.loading==true?'注册中...':'注册'}}</button>\n                      <br/>\n                      <p class=\"text-muted text-center\">\n                        <small>已经有账户?</small>\n                      </p>\n                      <a ui-sref=\"signin\" class=\"btn btn-lg btn-default btn-block\">登陆</a>\n                    </form>\n                  </div>\n                </section>\n              </section>\n            </div>\n          </section>\n        </div>\n      </div>\n\n      <footer id=\"footer\">\n        <div class=\"text-center padder\">\n          <p>\n            <small>关于我们 | 新闻中心 | 服务中心 | 客户案例 | 云商学院 | 友情链接 | 网站地图</small>\n          </p>\n          <p>\n            <small> 上海鼎捷网络科技有限公司 / 鼎捷软件股份有限公司 / 鼎新电脑股份有限公司 / 鼎诚资讯股份有限公司</small>\n          </p>\n          <p>\n            <small>Copyright2015 上海鼎捷网络科技有限公司.All Rights Reserved. | 沪ICP备15030386号-2</small>\n          </p>\n        </div>\n      </footer>\n    </section>\n  </section>\n</section>\n"
+
+/***/ },
+/* 68 */
+/***/ function(module, exports) {
+
+	module.exports = "<div >\n<h1>店铺管理首页</h1>\n</div>\n"
+
+/***/ },
+/* 69 */
+/***/ function(module, exports) {
+
+	module.exports = "ui.router";
+
+/***/ },
+/* 70 */
 /***/ function(module, exports) {
 
 	module.exports = angular;

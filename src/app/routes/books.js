@@ -1,17 +1,18 @@
+/**
+ * Created by linxy on 2016/1/19.
+ */
 export default function routes($stateProvider, $urlRouterProvider) {
-
   $stateProvider
-    .state('app.demo', {
-      url: '/demo',
+    .state('app.books', {
+      url: '/books',
       abstract: true,
       template: '<ui-view/>'
     });
-
   $stateProvider
-    .state('app.demo.main', {
+    .state('app.books.main', {
       url: '',
-      controller: 'demo.main',
-      template: require('../views/demo/main.html'),
+      controller: 'books.main',
+      template: require('../views/books/main.html'),
       controllerAs: 'vm'
     });
 }

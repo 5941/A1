@@ -1,2 +1,3 @@
 #代理服务器地址
-proxy: 'http://a1portal.azurewebsites.net'
+#proxy: 'http://a1portal.azurewebsites.net'
+proxy: 'http://localhost:50284'

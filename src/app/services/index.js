@@ -5,4 +5,5 @@ export default angular.module('app.services', [])
   .service('ProductService',require('./product'))
   .service('OrderService',require('./order'))
   .service('DemoService',require('./demo'))
+  .service('BookService', require('./books'))
   .name;
